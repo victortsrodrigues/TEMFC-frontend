@@ -3,7 +3,7 @@ import { checkEligibility, checkEligibilitySSE } from '../api/eligibilityApi';
 
 const useEligibilityCheck = () => {
   const [loading, setLoading] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [progress, setProgress] = useState({ step: 0, message: '', percentage: 0 });
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [eventSource, setEventSource] = useState(null);
@@ -20,27 +20,36 @@ const useEligibilityCheck = () => {
   // Check eligibility using SSE
   const checkUserEligibilitySSE = useCallback((userData) => {
     setLoading(true);
-    setProgress(0);
+    setProgress({ step: 0, message: 'Initializing...', percentage: 0 });
     setResult(null);
     setError(null);
     
-    const sse = checkEligibilitySSE(userData, {
+    checkEligibilitySSE(userData, {
+      onConnected: (data) => {
+        console.log('SSE connection established', data);
+      },
       onProgress: (progressData) => {
-        setProgress(progressData.percentComplete || 0);
+        // Format from backend: { step: number, message: string, percentage: number, status: string }
+        setProgress({
+          step: progressData.step || 0,
+          message: progressData.message || '',
+          percentage: progressData.percentage !== undefined ? progressData.percentage : progress.percentage,
+          status: progressData.status || 'in_progress'
+        });
       },
       onComplete: (resultData) => {
         setResult(resultData);
         setLoading(false);
-        setProgress(100);
+        setProgress(prev => ({ ...prev, percentage: 100, status: 'completed' }));
       },
       onError: (errorData) => {
         setError(errorData);
         setLoading(false);
       }
+    }).then(es => {
+      if (es) setEventSource(es);
     });
-    
-    setEventSource(sse);
-  }, []);
+  }, [progress.percentage]);
 
   // Fallback to regular HTTP request
   const checkUserEligibility = useCallback(async (userData) => {

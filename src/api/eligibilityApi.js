@@ -2,46 +2,69 @@ import axios from 'axios';
 
 const BASE_URL = 'http://localhost:5000';
 
-// Function to check eligibility using Server-Sent Events (SSE)
+// Updated function to check eligibility using Server-Sent Events (SSE)
 export const checkEligibilitySSE = (userData, callbacks) => {
-  // Create a new EventSource connection to the server
-  const eventSource = new EventSource(`${BASE_URL}/eligibility-sse`);
-  
-  // Send user data to start the process
-  axios.post(`${BASE_URL}/eligibility`, userData)
+  // First make a POST request to start the process and get a request_id
+  return axios.post(`${BASE_URL}/`, userData)
+    .then(response => {
+      const { request_id } = response.data;
+      
+      if (!request_id) {
+        throw new Error('No request ID received from server');
+      }
+      
+      // Create EventSource with the request_id parameter
+      const eventSource = new EventSource(`${BASE_URL}/events?request_id=${request_id}`);
+      
+      // Handle connection established
+      eventSource.addEventListener('connected', (event) => {
+        const data = JSON.parse(event.data);
+        callbacks.onConnected?.(data);
+      });
+      
+      // Handle progress events
+      eventSource.addEventListener('progress', (event) => {
+        const data = JSON.parse(event.data);
+        callbacks.onProgress?.(data);
+      });
+      
+      // Handle result events
+      eventSource.addEventListener('result', (event) => {
+        const data = JSON.parse(event.data);
+        callbacks.onComplete?.(data);
+        eventSource.close();
+      });
+      
+      // Handle error events
+      eventSource.addEventListener('error', (event) => {
+        try {
+          const data = JSON.parse(event.data);
+          callbacks.onError?.(data);
+        } catch (e) {
+          callbacks.onError?.({ error: 'SSE error event received' });
+        }
+        eventSource.close();
+      });
+      
+      // Handle general SSE errors
+      eventSource.onerror = () => {
+        callbacks.onError?.({ error: 'SSE connection error' });
+        eventSource.close();
+      };
+      
+      return eventSource;
+    })
     .catch(error => {
       // Handle network or request error
-      eventSource.close();
-      callbacks.onError(error.response?.data || { error: 'Network error occurred' });
+      callbacks.onError?.(error.response?.data || { error: 'Network error occurred' });
+      return null;
     });
-
-  // Listen for SSE events
-  eventSource.onmessage = (event) => {
-    const data = JSON.parse(event.data);
-    
-    // Process different event types
-    if (data.type === 'progress') {
-      callbacks.onProgress(data);
-    } else if (data.type === 'complete') {
-      callbacks.onComplete(data.result);
-      eventSource.close();
-    }
-  };
-
-  // Handle connection error
-  eventSource.onerror = (error) => {
-    callbacks.onError({ error: 'SSE connection error' });
-    eventSource.close();
-  };
-
-  // Return the eventSource to allow manual closing if needed
-  return eventSource;
 };
 
 // Regular HTTP request as fallback
 export const checkEligibility = async (userData) => {
   try {
-    const response = await axios.post(`${BASE_URL}/eligibility`, userData);
+    const response = await axios.post(`${BASE_URL}/`, userData);
     return response.data;
   } catch (error) {
     if (error.response) {

@@ -1,99 +1,163 @@
-import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
-// Define animations
-const spin = keyframes`
-  to {
-    transform: rotate(360deg);
-  }
-`;
-
-const pulse = keyframes`
-  0% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-  50% {
-    transform: scale(1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(0.8);
-    opacity: 0.5;
-  }
-`;
-
-// Main container for the loading indicator
 const LoadingContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing[8]};
-`;
-
-// Spinner component
-const Spinner = styled.div`
-  width: 40px;
-  height: 40px;
-  border: 3px solid ${({ theme }) => theme.colors.border};
-  border-top-color: ${({ theme }) => theme.colors.primary};
-  border-radius: 50%;
-  animation: ${spin} 1s linear infinite;
-`;
-
-// Text that appears below the spinner
-const LoadingText = styled.div`
-  margin-top: ${({ theme }) => theme.spacing[4]};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  color: ${({ theme }) => theme.colors.textLight};
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: ${({ theme }) => theme.spacing[6]};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  box-shadow: ${({ theme }) => theme.shadows.md};
   text-align: center;
-  animation: ${pulse} 1.5s ease infinite;
 `;
 
-// Progress bar container
-const ProgressBarContainer = styled.div`
+const LoadingTitle = styled.h3`
+  color: ${({ theme }) => theme.colors.primary};
+  margin-bottom: ${({ theme }) => theme.spacing[4]};
+`;
+
+const LoadingMessage = styled.p`
+  color: ${({ theme }) => theme.colors.text};
+  margin-bottom: ${({ theme }) => theme.spacing[4]};
+`;
+
+const ProgressContainer = styled.div`
   width: 100%;
-  max-width: 300px;
-  height: 8px;
-  background-color: ${({ theme }) => theme.colors.border};
+  background-color: ${({ theme }) => theme.colors.background};
   border-radius: ${({ theme }) => theme.borderRadius.full};
-  margin-top: ${({ theme }) => theme.spacing[4]};
+  height: 12px;
+  margin-bottom: ${({ theme }) => theme.spacing[3]};
   overflow: hidden;
 `;
 
-// Progress bar fill
-const ProgressBarFill = styled.div`
+const ProgressBar = styled.div`
   height: 100%;
-  width: ${({ progress }) => `${progress}%`};
-  background-color: ${({ theme }) => theme.colors.primary};
-  border-radius: ${({ theme }) => theme.borderRadius.full};
+  background-color: ${({ theme, status }) =>
+    status === "error"
+      ? theme.colors.error
+      : status === "completed"
+      ? theme.colors.success
+      : theme.colors.primary};
+  width: ${({ percentage }) => `${percentage}%`};
   transition: width 0.3s ease;
 `;
 
-// Progress value text
-const ProgressValue = styled.div`
-  margin-top: ${({ theme }) => theme.spacing[2]};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  color: ${({ theme }) => theme.colors.textLight};
+const StepIndicator = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin: ${({ theme }) => theme.spacing[4]} 0;
 `;
 
-const Loading = ({ message = 'Loading...', progress = null }) => {
-  const showProgress = progress !== null;
-  
+const Step = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+
+  &:not(:last-child)::after {
+    content: "";
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    width: 100%;
+    height: 2px;
+    background-color: ${({ theme, active, completed }) =>
+      completed
+        ? theme.colors.success
+        : active
+        ? theme.colors.primary
+        : theme.colors.background};
+  }
+`;
+
+const StepCircle = styled.div`
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background-color: ${({ theme, active, completed }) =>
+    completed
+      ? theme.colors.success
+      : active
+      ? theme.colors.primary
+      : theme.colors.background};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: ${({ theme }) => theme.spacing[2]};
+  z-index: 1;
+`;
+
+const StepNumber = styled.span`
+  color: ${({ theme, active, completed }) =>
+    active || completed ? theme.colors.white : theme.colors.textLight};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-weight: bold;
+`;
+
+const StepLabel = styled.span`
+  color: ${({ theme, active, completed }) =>
+    completed
+      ? theme.colors.success
+      : active
+      ? theme.colors.primary
+      : theme.colors.textLight};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  text-align: center;
+`;
+
+const Loading = ({
+  message = "Loading...",
+  progress = { step: 0, message: "", percentage: 0, status: "in_progress" },
+}) => {
+  const steps = [
+    { number: 1, label: "Data Retrieval" },
+    { number: 2, label: "Validation" },
+    { number: 3, label: "Processing" },
+  ];
+
+  const currentStep = progress.step || 0;
+
   return (
     <LoadingContainer>
-      <Spinner />
-      <LoadingText>{message}</LoadingText>
-      
-      {showProgress && (
-        <>
-          <ProgressBarContainer>
-            <ProgressBarFill progress={progress} />
-          </ProgressBarContainer>
-          <ProgressValue>{progress}%</ProgressValue>
-        </>
-      )}
+      <LoadingTitle>{message}</LoadingTitle>
+
+      <StepIndicator>
+        {steps.map((step) => (
+          <Step
+            key={step.number}
+            active={step.number === currentStep}
+            completed={step.number < currentStep}
+          >
+            <StepCircle
+              active={step.number === currentStep}
+              completed={step.number < currentStep}
+            >
+              <StepNumber
+                active={step.number === currentStep}
+                completed={step.number < currentStep}
+              >
+                {step.number}
+              </StepNumber>
+            </StepCircle>
+            <StepLabel
+              active={step.number === currentStep}
+              completed={step.number < currentStep}
+            >
+              {step.label}
+            </StepLabel>
+          </Step>
+        ))}
+      </StepIndicator>
+
+      <LoadingMessage>
+        {progress.message || `Step ${currentStep}: Processing...`}
+      </LoadingMessage>
+
+      <ProgressContainer>
+        <ProgressBar
+          percentage={progress.percentage || 0}
+          status={progress.status}
+        />
+      </ProgressContainer>
     </LoadingContainer>
   );
 };
