@@ -94,33 +94,65 @@ const Home = () => {
     cancelRequest();
   };
 
-  // Display any API errors
+  // Display any API errors with improved error handling
   const renderError = () => {
     if (!error) return null;
 
+    // Extract error details for display
     const errorTitle = error.error || 'Error';
+    
+    // Generate appropriate error message based on error details
     const errorMessage = (() => {
-      if (error.details?.cpf) {
-        return `CPF validation error: ${error.details.cpf}`;
-      } else if (error.details?.source === 'data_retrieval') {
-        return 'Could not find user data with the provided information.';
+      // Check for data retrieval errors
+      if (error.details?.source === 'data_retrieval') {
+        return `Could not find user data with the provided information. ${error.error || ''}`;
+      }
+      
+      // Check for specific CPF validation errors
+      if (error.details?.details?.cpf) {
+        return `CPF validation error: ${error.details.details.cpf}`;
+      }
+      
+      // Handle specific status codes
+      if (error.status_code === 404) {
+        return 'User data not found. Please check your information and try again.';
       } else if (error.status_code === 422) {
         return 'Data processing error. Please check your information and try again.';
       } else if (error.status_code === 503) {
-        return 'External service error. Please try again later.';
+        return 'Service currently unavailable. Please try again later.';
       } else if (error.status_code === 500) {
         return 'Server error. Please try again later.';
       }
-      return 'An unexpected error occurred. Please try again.';
+      
+      // Connection errors
+      if (error.details?.source === 'connection') {
+        return 'Connection to the server was lost. Please check your internet connection and try again.';
+      }
+      
+      // Network errors
+      if (error.details?.source === 'network') {
+        return 'Network error occurred. Please check your internet connection and try again.';
+      }
+      
+      // Progress event errors
+      if (error.details?.source === 'progress') {
+        return `Error during processing: ${error.error || 'Unknown error'}`;
+      }
+      
+      // Default error message as fallback
+      return error.error || 'An unexpected error occurred. Please try again.';
     })();
+
+    // Find the most useful details to display
+    const displayDetails = error.details?.details || error.details || {};
 
     return (
       <ErrorContainer>
         <ErrorTitle>{errorTitle}</ErrorTitle>
         <ErrorMessage>{errorMessage}</ErrorMessage>
-        {error.details && (
+        {Object.keys(displayDetails).length > 0 && (
           <ErrorDetails>
-            {JSON.stringify(error.details, null, 2)}
+            {JSON.stringify(displayDetails, null, 2)}
           </ErrorDetails>
         )}
       </ErrorContainer>
@@ -129,6 +161,7 @@ const Home = () => {
 
   // Determine what content to show
   const renderContent = () => {
+    // If still loading, show the loading component
     if (loading) {
       return (
         <Loading 
@@ -138,6 +171,7 @@ const Home = () => {
       );
     }
 
+    // If there's a result, show the result component
     if (result) {
       return (
         <EligibilityResult 
@@ -147,6 +181,7 @@ const Home = () => {
       );
     }
 
+    // Otherwise, show the form with any errors
     return (
       <>
         {renderError()}

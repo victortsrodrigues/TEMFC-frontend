@@ -25,6 +25,18 @@ export const checkEligibilitySSE = (userData, callbacks) => {
       // Handle progress events
       eventSource.addEventListener('progress', (event) => {
         const data = JSON.parse(event.data);
+        
+        // If progress contains an error status, handle it as an error
+        if (data.status === 'error') {
+          callbacks.onError?.({
+            error: data.message || 'Process error',
+            status_code: data.status_code || 500,
+            details: data.details || { source: 'progress', step: data.step }
+          });
+          eventSource.close();
+          return;
+        }
+        
         callbacks.onProgress?.(data);
       });
       
@@ -37,18 +49,36 @@ export const checkEligibilitySSE = (userData, callbacks) => {
       
       // Handle error events
       eventSource.addEventListener('error', (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          callbacks.onError?.(data);
-        } catch (e) {
-          callbacks.onError?.({ error: 'SSE error event received' });
+        // Try to parse error event data if available
+        if (event.data) {
+          try {
+            const data = JSON.parse(event.data);
+            callbacks.onError?.(data);
+          } catch (e) {
+            callbacks.onError?.({ 
+              error: 'Error event received', 
+              status_code: 500,
+              details: { source: 'sse_error_event' }
+            });
+          }
+        } else {
+          // The general error handler for the EventSource
+          callbacks.onError?.({ 
+            error: 'SSE connection error', 
+            status_code: 503,
+            details: { source: 'connection' }
+          });
         }
         eventSource.close();
       });
       
       // Handle general SSE errors
       eventSource.onerror = () => {
-        callbacks.onError?.({ error: 'SSE connection error' });
+        callbacks.onError?.({ 
+          error: 'SSE connection error', 
+          status_code: 503,
+          details: { source: 'connection' }
+        });
         eventSource.close();
       };
       
@@ -56,7 +86,13 @@ export const checkEligibilitySSE = (userData, callbacks) => {
     })
     .catch(error => {
       // Handle network or request error
-      callbacks.onError?.(error.response?.data || { error: 'Network error occurred' });
+      callbacks.onError?.(
+        error.response?.data || { 
+          error: 'Network error occurred', 
+          status_code: error.response?.status || 500,
+          details: { source: 'network' }
+        }
+      );
       return null;
     });
 };

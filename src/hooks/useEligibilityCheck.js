@@ -43,7 +43,19 @@ const useEligibilityCheck = () => {
         setProgress(prev => ({ ...prev, percentage: 100, status: 'completed' }));
       },
       onError: (errorData) => {
+        // Store full error data including status code and details
+        console.error('Eligibility check error:', errorData);
         setError(errorData);
+        
+        // Update progress to show error state if it came from a progress event
+        if (errorData.details?.source === 'progress' || errorData.details?.step) {
+          setProgress(prev => ({ 
+            ...prev, 
+            message: errorData.error || 'Error occurred',
+            status: 'error' 
+          }));
+        }
+        
         setLoading(false);
       }
     }).then(es => {
