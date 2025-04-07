@@ -1,10 +1,10 @@
 // Theme with colors, spacing, typography, and other design tokens
 const theme = {
   colors: {
-    primary: '#2563eb', // Blue
+    primary: '#6375f0', // Blue
     primaryHover: '#1d4ed8',
     secondary: '#64748b', // Slate
-    background: '#f8fafc',
+    background: 'radial-gradient(circle at bottom left, #3BAAFC 0%, #6D7CFD 20%, #77C3FD 50%, #9ad3fe  75%)',
     white: '#ffffff',
     text: '#1e293b',
     textLight: '#64748b',
@@ -48,8 +48,8 @@ const theme = {
   borderRadius: {
     sm: '0.125rem',
     md: '0.375rem',
-    lg: '0.5rem',
-    xl: '0.75rem',
+    lg: '0.6rem',
+    xl: '1.20rem',
     full: '9999px'
   },
   shadows: {

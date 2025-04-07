@@ -19,7 +19,7 @@ const InputField = styled.input`
   padding: ${({ theme }) => theme.spacing[2]};
   border: 1px solid ${({ hasError, theme }) => 
     hasError ? theme.colors.error : theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
   font-size: ${({ theme }) => theme.fontSizes.md};
   background-color: ${({ theme }) => theme.colors.inputBg};
   transition: border-color ${({ theme }) => theme.transitions.fast};

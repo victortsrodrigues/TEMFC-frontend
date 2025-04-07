@@ -14,6 +14,7 @@ const PageContainer = styled.div`
   align-items: center;
   justify-content: center;
   padding: ${({ theme }) => theme.spacing[4]};
+  background: ${({ theme }) => theme.colors.background};
 `;
 
 const Header = styled.header`
@@ -33,7 +34,7 @@ const Subtitle = styled.p`
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 600px;
+  max-width: 450px;
 `;
 
 const ErrorContainer = styled.div`
@@ -165,7 +166,7 @@ const Home = () => {
     if (loading) {
       return (
         <Loading 
-          message="Processing your eligibility check..." 
+          message="Processando sua solicitação..." 
           progress={progress} 
         />
       );
@@ -196,8 +197,8 @@ const Home = () => {
   return (
     <PageContainer>
       <Header>
-        <Title>Exam Eligibility Checker</Title>
-        <Subtitle>Verify your eligibility status instantly</Subtitle>
+        <Title>Verificador de Aptidão para o TEMFC</Title>
+        <Subtitle>Saiba se você está apto a realizar a próxima Prova de Título de Especialista em Medicina de Família e Comunidade em poucos segundos</Subtitle>
       </Header>
 
       <ContentContainer>

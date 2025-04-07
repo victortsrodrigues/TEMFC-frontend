@@ -105,7 +105,7 @@ const StepLabel = styled.span`
 `;
 
 const Loading = ({
-  message = "Loading...",
+  message = "Carregando...",
   progress = { step: 0, message: "", percentage: 0, status: "in_progress" },
 }) => {
   const steps = [

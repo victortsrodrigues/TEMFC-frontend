@@ -8,7 +8,7 @@ import { formatCPF } from '../utils/formatters';
 const FormContainer = styled.form`
   background-color: ${({ theme }) => theme.colors.white};
   padding: ${({ theme }) => theme.spacing[6]};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
   box-shadow: ${({ theme }) => theme.shadows.md};
   width: 100%;
   max-width: 500px;
@@ -123,9 +123,9 @@ const UserForm = ({ onSubmit, isLoading }) => {
 
   return (
     <FormContainer onSubmit={handleSubmit}>
-      <FormTitle>Eligibility Check</FormTitle>
+      <FormTitle>Verificador de Aptidão para o TEMFC</FormTitle>
       <FormDescription>
-        Enter your CPF and full name to check your eligibility status.
+        Envie seu CPF e nome completo para a avaliação.
       </FormDescription>
       
       <FormInput
@@ -137,7 +137,7 @@ const UserForm = ({ onSubmit, isLoading }) => {
         onBlur={handleBlur}
         placeholder="000.000.000-00"
         error={errors.cpf}
-        helperText="Enter your 11-digit CPF number"
+        helperText="Insira os 11 dígitos do seu CPF, sem pontos ou traços"
         required
         disabled={isLoading}
         maxLength={14} // Including formatting characters
@@ -146,13 +146,13 @@ const UserForm = ({ onSubmit, isLoading }) => {
       <FormInput
         id="name"
         name="name"
-        label="Full Name"
+        label="Nome completo"
         value={formData.name}
         onChange={handleChange}
         onBlur={handleBlur}
-        placeholder="Enter your full name"
+        placeholder="Insira seu nome completo"
         error={errors.name}
-        helperText="Enter your complete name as it appears in your documents"
+        helperText="Insira seu nome completo sem abreviações"
         required
         disabled={isLoading}
       />
@@ -165,7 +165,7 @@ const UserForm = ({ onSubmit, isLoading }) => {
           fullWidth
           disabled={isLoading}
         >
-          {isLoading ? 'Processing...' : 'Check Eligibility'}
+          {isLoading ? 'Processing...' : 'Verificar Aptidão'}
         </Button>
       </ButtonContainer>
     </FormContainer>

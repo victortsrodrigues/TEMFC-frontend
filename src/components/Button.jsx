@@ -9,7 +9,7 @@ const StyledButton = styled.button`
   padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[4]}`};
   font-size: ${({ theme }) => theme.fontSizes.md};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
   transition: all ${({ theme }) => theme.transitions.fast};
   cursor: pointer;
   
