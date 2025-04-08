@@ -137,7 +137,7 @@ const EligibilityResult = ({ result, onReset }) => {
           variant="outline"
           size="md"
         >
-          Check Another
+          Fazer outra verificação
         </Button>
       </ButtonContainer>
     </ResultContainer>

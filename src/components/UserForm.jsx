@@ -11,20 +11,21 @@ const FormContainer = styled.form`
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   box-shadow: ${({ theme }) => theme.shadows.md};
   width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
+  /* max-width: 500px; */
+  /* margin: 0 auto; */
 `;
 
 const FormTitle = styled.h3`
   color: ${({ theme }) => theme.colors.text};
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing[1]};
+  margin-top: ${({ theme }) => theme.spacing[2]};
 `;
 
 const FormDescription = styled.p`
   color: ${({ theme }) => theme.colors.textLight};
   text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing[10]};
+  margin-bottom: ${({ theme }) => theme.spacing[6]};
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
 
@@ -41,7 +42,7 @@ const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: ${({ theme }) => theme.spacing[6]};
-  margin-bottom: ${({ theme }) => theme.spacing[12]};
+  margin-bottom: ${({ theme }) => theme.spacing[6]};
   padding-left: ${({ theme }) => theme.spacing[8]};
   padding-right: ${({ theme }) => theme.spacing[8]};
 `;
@@ -180,12 +181,6 @@ const UserForm = ({ onSubmit, isLoading }) => {
           {isLoading ? 'Processing...' : 'Verificar Aptidão'}
         </Button>
       </ButtonContainer>
-      <FormFooter>
-        Link para o edital: <a href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">sbmfc.org.br/concurso-atual</a>
-      </FormFooter>
-      <FormFooter>
-        Critérios para o cálculo de aptidão: <a href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">Critérios</a>
-      </FormFooter>
     </FormContainer>
   );
 };

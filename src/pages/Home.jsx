@@ -10,31 +10,90 @@ import useEligibilityCheck from '../hooks/useEligibilityCheck';
 const PageContainer = styled.div`
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: ${({ theme }) => theme.spacing[4]};
   background: ${({ theme }) => theme.colors.background};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    flex-direction: column;
+  }
+`;
+
+const LeftSection = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: ${({ theme }) => theme.spacing[8]};
+  color: ${({ theme }) => theme.colors.white};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding: ${({ theme }) => theme.spacing[6]};
+    text-align: center;
+  }
+`;
+
+const RightSection = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: ${({ theme }) => theme.spacing[4]};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding-top: 0;
+  }
 `;
 
 const Header = styled.header`
-  text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing[6]};
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
 `;
 
 const Title = styled.h1`
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing[2]};
+  color: ${({ theme }) => theme.colors.white};
+  margin-bottom: ${({ theme }) => theme.spacing[4]};
+  font-size: ${({ theme }) => theme.fontSizes['4xl']};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
+  line-height: 1.2;
 `;
 
 const Subtitle = styled.p`
-  color: ${({ theme }) => theme.colors.textLight};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
+  color: ${({ theme }) => theme.colors.white};
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+  margin-bottom: ${({ theme }) => theme.spacing[6]};
+  opacity: 0.9;
+`;
+
+const InfoSection = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
+`;
+
+const InfoTitle = styled.h3`
+  color: ${({ theme }) => theme.colors.white};
+  margin-bottom: ${({ theme }) => theme.spacing[3]};
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+`;
+
+const InfoText = styled.p`
+  color: ${({ theme }) => theme.colors.white};
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  margin-bottom: ${({ theme }) => theme.spacing[2]};
+  opacity: 0.9;
+  line-height: 1.6;
+`;
+
+const InfoLink = styled.a`
+  color: ${({ theme }) => theme.colors.white};
+  text-decoration: underline;
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
+  
+  &:hover {
+    opacity: 0.8;
+  }
 `;
 
 const ContentContainer = styled.div`
   width: 100%;
-  max-width: 450px;
+  max-width: 500px;
 `;
 
 const ErrorContainer = styled.div`
@@ -72,7 +131,8 @@ const Home = () => {
     result, 
     error,
     checkUserEligibilitySSE, 
-    cancelRequest 
+    cancelRequest,
+    resetState
   } = useEligibilityCheck();
 
   const { 
@@ -83,7 +143,7 @@ const Home = () => {
 
   // Handle form submission
   const handleSubmit = (formData) => {
-    setShowResults(false);
+    // setShowResults(false);
     
     // Use SSE for the request (preferred method)
     checkUserEligibilitySSE(formData);
@@ -91,8 +151,9 @@ const Home = () => {
 
   // Reset the form and state
   const handleReset = () => {
-    setShowResults(false);
-    cancelRequest();
+    // setShowResults(false);
+    // cancelRequest();
+    resetState();
   };
 
   // Display any API errors with improved error handling
@@ -196,22 +257,50 @@ const Home = () => {
 
   return (
     <PageContainer>
-      <Header>
-        <Title>Verificador de Aptidão para o TEMFC</Title>
-        <Subtitle>Saiba se você está apto a realizar a próxima Prova de Título de Especialista em Medicina de Família e Comunidade em poucos segundos</Subtitle>
-      </Header>
+      <LeftSection>
+        <Header>
+          <Title>Verificador de Aptidão para o TEMFC</Title>
+          <Subtitle>Saiba se você está apto a realizar a próxima Prova de Título de Especialista em Medicina de Família e Comunidade</Subtitle>
+        </Header>
 
-      <ContentContainer>
-        {renderContent()}
-      </ContentContainer>
+        <InfoSection>
+          <InfoTitle>O que é o TEMFC?</InfoTitle>
+          <InfoText>
+            O Título de Especialista em Medicina de Família e Comunidade (TEMFC) é uma certificação concedida pela Sociedade Brasileira de Medicina de Família e Comunidade (SBMFC).
+          </InfoText>
+          <InfoText>
+            Esta ferramenta verifica sua aptidão para realizar a prova com base nos critérios oficiais do edital atual.
+          </InfoText>
+        </InfoSection>
 
-      {notification && (
-        <Alert
-          type={notification.type}
-          message={notification.message}
-          onClose={clearNotification}
-        />
-      )}
+        <InfoSection>
+          <InfoTitle>Links Importantes</InfoTitle>
+          <InfoText>
+            <InfoLink href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">
+              Edital Atual
+            </InfoLink>
+          </InfoText>
+          <InfoText>
+            <InfoLink href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">
+              Critérios de Aptidão
+            </InfoLink>
+          </InfoText>
+        </InfoSection>
+      </LeftSection>
+
+      <RightSection>
+        <ContentContainer>
+          {renderContent()}
+        </ContentContainer>
+
+        {notification && (
+          <Alert
+            type={notification.type}
+            message={notification.message}
+            onClose={clearNotification}
+          />
+        )}
+      </RightSection>
     </PageContainer>
   );
 };
