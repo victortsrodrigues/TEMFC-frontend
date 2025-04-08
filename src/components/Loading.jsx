@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { MagnifyingGlass } from "react-loader-spinner";
 
 const LoadingContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
@@ -14,9 +15,15 @@ const LoadingTitle = styled.h3`
   margin-bottom: ${({ theme }) => theme.spacing[4]};
 `;
 
-const LoadingMessage = styled.p`
+const LoadingMessage = styled.h4`
   color: ${({ theme }) => theme.colors.text};
   margin-bottom: ${({ theme }) => theme.spacing[4]};
+`;
+
+const LoadingAlert = styled.p`
+  color: ${({ theme }) => theme.colors.textLight};
+  margin-bottom: ${({ theme }) => theme.spacing[4]};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
 `;
 
 const ProgressContainer = styled.div`
@@ -120,44 +127,25 @@ const Loading = ({
     <LoadingContainer>
       <LoadingTitle>{message}</LoadingTitle>
 
-      <StepIndicator>
-        {steps.map((step) => (
-          <Step
-            key={step.number}
-            active={step.number === currentStep}
-            completed={step.number < currentStep}
-          >
-            <StepCircle
-              active={step.number === currentStep}
-              completed={step.number < currentStep}
-            >
-              <StepNumber
-                active={step.number === currentStep}
-                completed={step.number < currentStep}
-              >
-                {step.number}
-              </StepNumber>
-            </StepCircle>
-            <StepLabel
-              active={step.number === currentStep}
-              completed={step.number < currentStep}
-            >
-              {step.label}
-            </StepLabel>
-          </Step>
-        ))}
-      </StepIndicator>
-
+      <MagnifyingGlass
+        visible={true}
+        height="100"
+        width="100"
+        ariaLabel="magnifying-glass-loading"
+        wrapperStyle={{}}
+        wrapperClass="magnifying-glass-wrapper"
+        glassColor="#c0efff"
+        color="#6375f0"
+      />
+          
       <LoadingMessage>
         {progress.message || `Step ${currentStep}: Processing...`}
       </LoadingMessage>
 
-      <ProgressContainer>
-        <ProgressBar
-          percentage={progress.percentage || 0}
-          status={progress.status}
-        />
-      </ProgressContainer>
+      <LoadingAlert>
+      Isto pode demorar alguns segundos
+      </LoadingAlert>
+    
     </LoadingContainer>
   );
 };

@@ -6,12 +6,15 @@ const InputContainer = styled.div`
   flex-direction: column;
   margin-bottom: ${({ theme }) => theme.spacing[4]};
   width: 100%;
+  padding-left: ${({ theme }) => theme.spacing[8]};
+  padding-right: ${({ theme }) => theme.spacing[8]};
 `;
 
 const Label = styled.label`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   margin-bottom: ${({ theme }) => theme.spacing[1]};
+  margin-left: ${({ theme }) => theme.spacing[2]};
   color: ${({ theme }) => theme.colors.text};
 `;
 
@@ -20,7 +23,7 @@ const InputField = styled.input`
   border: 1px solid ${({ hasError, theme }) => 
     hasError ? theme.colors.error : theme.colors.border};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  font-size: ${({ theme }) => theme.fontSizes.md};
+  font-size: ${({ theme }) => theme.fontSizes.sm};
   background-color: ${({ theme }) => theme.colors.inputBg};
   transition: border-color ${({ theme }) => theme.transitions.fast};
   
@@ -38,18 +41,25 @@ const InputField = styled.input`
     background-color: ${({ theme }) => theme.colors.disabled};
     cursor: not-allowed;
   }
+
+  &::placeholder {
+    font-weight: ${({ theme }) => theme.fontWeights.light};
+    opacity: 0.6;
+  }
 `;
 
 const ErrorMessage = styled.span`
-  font-size: ${({ theme }) => theme.fontSizes.sm};
+  font-size: ${({ theme }) => theme.fontSizes.xs};
   color: ${({ theme }) => theme.colors.error};
   margin-top: ${({ theme }) => theme.spacing[1]};
+  margin-left: ${({ theme }) => theme.spacing[2]};
 `;
 
 const HelperText = styled.span`
   font-size: ${({ theme }) => theme.fontSizes.xs};
   color: ${({ theme }) => theme.colors.textLight};
   margin-top: ${({ theme }) => theme.spacing[1]};
+  margin-left: ${({ theme }) => theme.spacing[2]};
 `;
 
 const FormInput = ({

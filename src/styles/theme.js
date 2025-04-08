@@ -2,11 +2,11 @@
 const theme = {
   colors: {
     primary: '#6375f0', // Blue
-    primaryHover: '#1d4ed8',
+    primaryHover: '#4f61e6',
     secondary: '#64748b', // Slate
     background: 'radial-gradient(circle at bottom left, #3BAAFC 0%, #6D7CFD 20%, #77C3FD 50%, #9ad3fe  75%)',
     white: '#ffffff',
-    text: '#1e293b',
+    text: '#262626',
     textLight: '#64748b',
     success: '#10b981', // Green
     error: '#ef4444', // Red

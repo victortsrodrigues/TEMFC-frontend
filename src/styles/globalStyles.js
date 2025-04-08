@@ -8,7 +8,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: 'Roboto', sans-serif;
+    font-family: "Inter", sans-serif;
     background-color: ${({ theme }) => theme.colors.background};
     color: ${({ theme }) => theme.colors.text};
     line-height: 1.5;
@@ -33,7 +33,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   p {
-    margin-bottom: ${({ theme }) => theme.spacing[4]};
+    margin-bottom: ${({ theme }) => theme.spacing[1]};
   }
 
   input, button, textarea, select {
@@ -44,6 +44,7 @@ const GlobalStyles = createGlobalStyle`
   a {
     color: ${({ theme }) => theme.colors.primary};
     text-decoration: none;
+    font-weight: ${({ theme }) => theme.fontWeights.bold};
     
     &:hover {
       text-decoration: underline;

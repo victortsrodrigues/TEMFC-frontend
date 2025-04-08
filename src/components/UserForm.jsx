@@ -15,23 +15,35 @@ const FormContainer = styled.form`
   margin: 0 auto;
 `;
 
-const FormTitle = styled.h2`
+const FormTitle = styled.h3`
   color: ${({ theme }) => theme.colors.text};
   text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing[6]};
+  margin-bottom: ${({ theme }) => theme.spacing[1]};
 `;
 
 const FormDescription = styled.p`
   color: ${({ theme }) => theme.colors.textLight};
   text-align: center;
-  margin-bottom: ${({ theme }) => theme.spacing[6]};
+  margin-bottom: ${({ theme }) => theme.spacing[10]};
   font-size: ${({ theme }) => theme.fontSizes.sm};
 `;
+
+const FormFooter = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.xs};
+  color: ${({ theme }) => theme.colors.textLight};
+  /* text-align: center; */
+  font-size: ${({ theme }) => theme.fontSizes.sm};
+  padding-left: ${({ theme }) => theme.spacing[8]};
+  padding-right: ${({ theme }) => theme.spacing[8]};
+`
 
 const ButtonContainer = styled.div`
   display: flex;
   justify-content: center;
   margin-top: ${({ theme }) => theme.spacing[6]};
+  margin-bottom: ${({ theme }) => theme.spacing[12]};
+  padding-left: ${({ theme }) => theme.spacing[8]};
+  padding-right: ${({ theme }) => theme.spacing[8]};
 `;
 
 const UserForm = ({ onSubmit, isLoading }) => {
@@ -123,9 +135,9 @@ const UserForm = ({ onSubmit, isLoading }) => {
 
   return (
     <FormContainer onSubmit={handleSubmit}>
-      <FormTitle>Verificador de Aptidão para o TEMFC</FormTitle>
+      <FormTitle>Verifique sua aptidão</FormTitle>
       <FormDescription>
-        Envie seu CPF e nome completo para a avaliação.
+        Envie seus dados para a avaliação.
       </FormDescription>
       
       <FormInput
@@ -137,7 +149,7 @@ const UserForm = ({ onSubmit, isLoading }) => {
         onBlur={handleBlur}
         placeholder="000.000.000-00"
         error={errors.cpf}
-        helperText="Insira os 11 dígitos do seu CPF, sem pontos ou traços"
+        helperText="Insira os 11 dígitos do seu CPF, sem pontos ou traços."
         required
         disabled={isLoading}
         maxLength={14} // Including formatting characters
@@ -152,7 +164,7 @@ const UserForm = ({ onSubmit, isLoading }) => {
         onBlur={handleBlur}
         placeholder="Insira seu nome completo"
         error={errors.name}
-        helperText="Insira seu nome completo sem abreviações"
+        helperText="Insira seu nome completo sem abreviações."
         required
         disabled={isLoading}
       />
@@ -168,6 +180,12 @@ const UserForm = ({ onSubmit, isLoading }) => {
           {isLoading ? 'Processing...' : 'Verificar Aptidão'}
         </Button>
       </ButtonContainer>
+      <FormFooter>
+        Link para o edital: <a href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">sbmfc.org.br/concurso-atual</a>
+      </FormFooter>
+      <FormFooter>
+        Critérios para o cálculo de aptidão: <a href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">Critérios</a>
+      </FormFooter>
     </FormContainer>
   );
 };

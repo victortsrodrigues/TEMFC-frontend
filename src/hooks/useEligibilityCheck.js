@@ -17,6 +17,20 @@ const useEligibilityCheck = () => {
     setLoading(false);
   }, [eventSource]);
 
+  const checkUserEligibilitySSE = (userData) => {
+    setLoading(true);
+    setProgress(0);
+    
+    // Comment out the rest of the function to prevent it from completing
+    // Just add this line to simulate progress updates
+    const interval = setInterval(() => {
+      setProgress(prev => Math.min(prev + 5, 95)); // Never reaches 100%
+    }, 500);
+    
+    return () => clearInterval(interval);
+  };
+
+  /*
   // Check eligibility using SSE
   const checkUserEligibilitySSE = useCallback((userData) => {
     setLoading(true);
@@ -62,6 +76,7 @@ const useEligibilityCheck = () => {
       if (es) setEventSource(es);
     });
   }, [progress.percentage]);
+  */
 
   // Fallback to regular HTTP request
   const checkUserEligibility = useCallback(async (userData) => {
