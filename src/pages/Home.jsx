@@ -25,6 +25,7 @@ const LeftSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: ${({ theme }) => theme.spacing[4]};
   padding: ${({ theme }) => theme.spacing[8]};
   color: ${({ theme }) => theme.colors.white};
 
@@ -50,9 +51,9 @@ const FeatureItem = styled.li`
   font-size: ${({ theme }) => theme.fontSizes.md};
   margin-bottom: ${({ theme }) => theme.spacing[3]};
   &::before {
-    content: "✓"; /* Alterado: bullet personalizado */
+    content: "✓";
     margin-right: ${({ theme }) => theme.spacing[2]};
-    color: ${({ theme }) => theme.colors.primary};
+    color: ${({ theme }) => theme.colors.white};
   }
 `;
 
@@ -64,17 +65,29 @@ const LinkGroup = styled.div`
   flex-wrap: wrap;
 `;
 
+// Hero CTA Button com estilo aprimorado
 const CTAButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
-  padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
+  display: block;
+  width: 100%;
+  max-width: 360px;                        /* cap na largura */
+  margin: ${({ theme }) => theme.spacing[0]} auto ${({ theme }) => theme.spacing[8]};
+  font-size: 1.25rem;                      /* 20px para destaque */
+  padding: ${({ theme }) => `${theme.spacing[4]} ${theme.spacing[10]}`}; /* 16px 40px */
+  min-height: 3.5rem;                      /* 56px touch target */
+  border-radius: ${({ theme }) => theme.borderRadius.xl};
   border: none;
+  box-shadow: 0 4px 12px rgba(99, 117, 240, 0.3);
+  transition: background-color 0.2s ease, transform 0.1s ease;
   cursor: pointer;
-  transition: ${({ theme }) => theme.transitions.fast};
+
   &:hover {
     background-color: ${({ theme }) => theme.colors.primaryHover};
+  }
+
+  &:active {
+    transform: translateY(1px);
   }
 `;
 
@@ -128,7 +141,7 @@ const ContentContainer = styled.div`
 `;
 
 const HomeImage = styled.img`
-  max-width: 90%;
+  max-width: 85%;
   height: auto;
   transition: all 0.5s ease;
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
@@ -336,13 +349,13 @@ const Home = () => {
           Insira seu nome completo e CPF para verificar automaticamente sua
           elegibilidade para a prova de Título de Especialista em Medicina de
           Família e Comunidade (TEMFC 36). Nosso sistema analisa todos os critérios
-          do edital em questão e retorna seu status em poucos segundos.
+          do edital atual e retorna seu status em poucos segundos.
         </Description>
 
         <FeatureList>
-          <FeatureItem>Resultados em menos de 10 segundos</FeatureItem>
-          <FeatureItem>Seguro e confidencial</FeatureItem>
-          <FeatureItem>100% gratuito</FeatureItem>
+          <FeatureItem>Resultado em poucos segundos.</FeatureItem>
+          <FeatureItem>Seguro e confidencial.</FeatureItem>
+          <FeatureItem>100% gratuito.</FeatureItem>
         </FeatureList>
 
         <LinkGroup>

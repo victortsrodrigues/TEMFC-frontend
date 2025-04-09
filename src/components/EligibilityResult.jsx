@@ -124,12 +124,12 @@ const EligibilityResult = ({ result, onReset }) => {
           <InfoValueText status={status}>{formatStatus(status)}</InfoValueText>
         </InfoRow>
         <InfoRow>
-          <InfoLabel>Valid Months</InfoLabel>
+          <InfoLabel>Meses Válidos</InfoLabel>
           <InfoValue>{formatDecimal(valid_months)}</InfoValue>
         </InfoRow>
 
         <InfoRow>
-          <InfoLabel>Pending Months</InfoLabel>
+          <InfoLabel>Meses Pendentes</InfoLabel>
           <InfoValue>{formatDecimal(pending_months)}</InfoValue>
         </InfoRow>
       </InfoSection>
