@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import UserForm from '../components/UserForm';
-import EligibilityResult from '../components/EligibilityResult';
-import Loading from '../components/Loading';
-import Alert from '../components/Alert';
-import { useNotification } from '../contexts/NotificationContext';
-import useEligibilityCheck from '../hooks/useEligibilityCheck';
+import React, { useState, useRef, useEffect } from "react";
+import styled from "styled-components";
+import UserForm from "../components/UserForm";
+import EligibilityResult from "../components/EligibilityResult";
+import Loading from "../components/Loading";
+import Alert from "../components/Alert";
+import CriteriaDialog from "../components/CriteriaDialog";
+import { useNotification } from "../contexts/NotificationContext";
+import useEligibilityCheck from "../hooks/useEligibilityCheck";
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -31,6 +32,50 @@ const LeftSection = styled.div`
   }
 `;
 
+const Description = styled.p`
+  font-size: ${({ theme }) => theme.fontSizes.lg};
+  margin-bottom: ${({ theme }) => theme.spacing[6]};
+  opacity: 0.9;
+`;
+
+const FeatureList = styled.ul`
+  list-style: none;
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
+  padding: 0;
+`;
+
+const FeatureItem = styled.li`
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  margin-bottom: ${({ theme }) => theme.spacing[3]};
+  &::before {
+    content: "✓"; /* Alterado: bullet personalizado */
+    margin-right: ${({ theme }) => theme.spacing[2]};
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`;
+
+const LinkGroup = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing[4]}; /* Alterado: espaçamento entre links */
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
+  flex-wrap: wrap;
+`;
+
+const CTAButton = styled.button`
+  background-color: ${({ theme }) => theme.colors.primary};
+  color: ${({ theme }) => theme.colors.white};
+  font-size: ${({ theme }) => theme.fontSizes.lg}; /* Alterado: maior para chamar atenção */
+  padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  border: none;
+  cursor: pointer;
+  transition: ${({ theme }) => theme.transitions.fast};
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primaryHover};
+  }
+`;
+
 const RightSection = styled.div`
   flex: 1;
   display: flex;
@@ -45,20 +90,20 @@ const RightSection = styled.div`
 `;
 
 const Header = styled.header`
-  margin-bottom: ${({ theme }) => theme.spacing[8]};
+  margin-bottom: ${({ theme }) => theme.spacing[6]};
 `;
 
 const Title = styled.h1`
   color: ${({ theme }) => theme.colors.white};
   margin-bottom: ${({ theme }) => theme.spacing[4]};
-  font-size: ${({ theme }) => theme.fontSizes['4xl']};
+  font-size: ${({ theme }) => theme.fontSizes["5xl"]};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   line-height: 1.2;
 `;
 
 const Subtitle = styled.p`
   color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-size: ${({ theme }) => theme.fontSizes['2xl']};
   margin-bottom: ${({ theme }) => theme.spacing[6]};
   opacity: 0.9;
 `;
@@ -85,7 +130,7 @@ const InfoLink = styled.a`
   color: ${({ theme }) => theme.colors.white};
   text-decoration: underline;
   font-weight: ${({ theme }) => theme.fontWeights.medium};
-  
+
   &:hover {
     opacity: 0.8;
   }
@@ -108,6 +153,7 @@ const ErrorContainer = styled.div`
 const ErrorTitle = styled.h3`
   color: ${({ theme }) => theme.colors.error};
   margin-bottom: ${({ theme }) => theme.spacing[2]};
+  font-size: ${({ theme }) => theme.fontSizes.xl};
 `;
 
 const ErrorMessage = styled.p`
@@ -115,44 +161,27 @@ const ErrorMessage = styled.p`
   margin-bottom: ${({ theme }) => theme.spacing[4]};
 `;
 
-const ErrorDetails = styled.pre`
-  background-color: ${({ theme }) => theme.colors.background};
-  padding: ${({ theme }) => theme.spacing[3]};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  overflow-x: auto;
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-`;
-
 const Home = () => {
   const [showResults, setShowResults] = useState(false);
-  const { 
-    loading, 
-    progress, 
-    result, 
+  const {
+    loading,
+    progress,
+    result,
     error,
-    checkUserEligibilitySSE, 
+    checkUserEligibilitySSE,
     cancelRequest,
-    resetState
+    resetState,
   } = useEligibilityCheck();
 
-  const { 
-    notification, 
-    notifyError, 
-    clearNotification 
-  } = useNotification();
+  const { notification, notifyError, clearNotification } = useNotification();
 
   // Handle form submission
   const handleSubmit = (formData) => {
-    // setShowResults(false);
-    
-    // Use SSE for the request (preferred method)
     checkUserEligibilitySSE(formData);
   };
 
   // Reset the form and state
   const handleReset = () => {
-    // setShowResults(false);
-    // cancelRequest();
     resetState();
   };
 
@@ -161,48 +190,45 @@ const Home = () => {
     if (!error) return null;
 
     // Extract error details for display
-    const errorTitle = error.error || 'Error';
-    
+    const errorTitle = error.error || "Error";
+
     // Generate appropriate error message based on error details
     const errorMessage = (() => {
-      // Check for data retrieval errors
-      if (error.details?.source === 'data_retrieval') {
-        return `Could not find user data with the provided information. ${error.error || ''}`;
-      }
-      
-      // Check for specific CPF validation errors
-      if (error.details?.details?.cpf) {
-        return `CPF validation error: ${error.details.details.cpf}`;
-      }
-      
       // Handle specific status codes
       if (error.status_code === 404) {
-        return 'User data not found. Please check your information and try again.';
+        return "Por favor, verifique os dados e tente novamente.";
       } else if (error.status_code === 422) {
-        return 'Data processing error. Please check your information and try again.';
+        return "Por favor, tente novamente mais tarde.";
       } else if (error.status_code === 503) {
-        return 'Service currently unavailable. Please try again later.';
+        return "Conexão externa indisponível. Por favor, tente novamente mais tarde.";
       } else if (error.status_code === 500) {
-        return 'Server error. Please try again later.';
+        return "Por favor, tente novamente mais tarde.";
       }
-      
+
+      // Check for data retrieval errors
+      if (error.details?.source === "data_retrieval") {
+        return `Could not find user data with the provided information. ${
+          error.error || ""
+        }`;
+      }
+
       // Connection errors
-      if (error.details?.source === 'connection') {
-        return 'Connection to the server was lost. Please check your internet connection and try again.';
+      if (error.details?.source === "connection") {
+        return "Connection to the server was lost. Please check your internet connection and try again.";
       }
-      
+
       // Network errors
-      if (error.details?.source === 'network') {
-        return 'Network error occurred. Please check your internet connection and try again.';
+      if (error.details?.source === "network") {
+        return "Network error occurred. Please check your internet connection and try again.";
       }
-      
+
       // Progress event errors
-      if (error.details?.source === 'progress') {
-        return `Error during processing: ${error.error || 'Unknown error'}`;
+      if (error.details?.source === "progress") {
+        return `Error during processing: ${error.error || "Unknown error"}`;
       }
-      
+
       // Default error message as fallback
-      return error.error || 'An unexpected error occurred. Please try again.';
+      return error.error || "An unexpected error occurred. Please try again.";
     })();
 
     // Find the most useful details to display
@@ -212,11 +238,6 @@ const Home = () => {
       <ErrorContainer>
         <ErrorTitle>{errorTitle}</ErrorTitle>
         <ErrorMessage>{errorMessage}</ErrorMessage>
-        {Object.keys(displayDetails).length > 0 && (
-          <ErrorDetails>
-            {JSON.stringify(displayDetails, null, 2)}
-          </ErrorDetails>
-        )}
       </ErrorContainer>
     );
   };
@@ -226,72 +247,74 @@ const Home = () => {
     // If still loading, show the loading component
     if (loading) {
       return (
-        <Loading 
-          message="Processando sua solicitação..." 
-          progress={progress} 
-        />
+        <Loading message="Processando sua solicitação..." progress={progress} />
       );
     }
 
     // If there's a result, show the result component
     if (result) {
-      return (
-        <EligibilityResult 
-          result={result} 
-          onReset={handleReset} 
-        />
-      );
+      return <EligibilityResult result={result} onReset={handleReset} />;
     }
 
     // Otherwise, show the form with any errors
     return (
       <>
         {renderError()}
-        <UserForm 
-          onSubmit={handleSubmit} 
-          isLoading={loading} 
-        />
+        <UserForm onSubmit={handleSubmit} isLoading={loading} />
       </>
     );
   };
+
+  // Dialog state management
+  let [isOpen, setIsOpen] = useState(false);
+  function openDialog() {
+    setIsOpen(true);
+  }
+  function closeDialog() {
+    setIsOpen(false);
+  }
 
   return (
     <PageContainer>
       <LeftSection>
         <Header>
-          <Title>Verificador de Aptidão para o TEMFC</Title>
-          <Subtitle>Saiba se você está apto a realizar a próxima Prova de Título de Especialista em Medicina de Família e Comunidade</Subtitle>
+          <Title>Verificador TEMFC 36</Title>
+          <Subtitle>Cheque sua elegibilidade em segundos</Subtitle>
         </Header>
 
-        <InfoSection>
-          <InfoTitle>O que é o TEMFC?</InfoTitle>
-          <InfoText>
-            O Título de Especialista em Medicina de Família e Comunidade (TEMFC) é uma certificação concedida pela Sociedade Brasileira de Medicina de Família e Comunidade (SBMFC).
-          </InfoText>
-          <InfoText>
-            Esta ferramenta verifica sua aptidão para realizar a prova com base nos critérios oficiais do edital atual.
-          </InfoText>
-        </InfoSection>
+        <Description>
+          Insira seu nome completo e CPF para verificar automaticamente sua
+          elegibilidade para a prova de Título de Especialista em Medicina de
+          Família e Comunidade (TEMFC 36). Nosso sistema analisa todos os critérios
+          do edital em questão e retorna seu status em poucos segundos.
+        </Description>
 
-        <InfoSection>
-          <InfoTitle>Links Importantes</InfoTitle>
-          <InfoText>
-            <InfoLink href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">
-              Edital Atual
-            </InfoLink>
-          </InfoText>
-          <InfoText>
-            <InfoLink href="https://www.sbmfc.org.br/concurso-atual/" target="_blank" rel="noopener noreferrer">
-              Critérios de Aptidão
-            </InfoLink>
-          </InfoText>
-        </InfoSection>
+        <FeatureList>
+          <FeatureItem>Resultados em menos de 10 segundos</FeatureItem>
+          <FeatureItem>Seguro e confidencial</FeatureItem>
+          <FeatureItem>100% gratuito</FeatureItem>
+        </FeatureList>
+
+        <LinkGroup>
+          <InfoLink
+            href="https://www.sbmfc.org.br/concurso-atual/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Edital Atual
+          </InfoLink> {/* Mantido: link edital */}
+          <InfoLink href="#" onClick={(e) => { e.preventDefault(); openDialog(); }}>
+            Critérios de Cálculo
+          </InfoLink> {/* Mantido: link abre diálogo */}
+        </LinkGroup>
+
+        <CTAButton>
+          Verificar Agora
+        </CTAButton>
       </LeftSection>
 
       <RightSection>
-        <ContentContainer>
-          {renderContent()}
-        </ContentContainer>
+        <ContentContainer>{renderContent()}</ContentContainer>
 
         {notification && (
           <Alert
@@ -301,6 +324,7 @@ const Home = () => {
           />
         )}
       </RightSection>
+      <CriteriaDialog isOpen={isOpen} closeDialog={closeDialog} />
     </PageContainer>
   );
 };

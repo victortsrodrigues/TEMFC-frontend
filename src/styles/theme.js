@@ -2,17 +2,17 @@
 // background: 'radial-gradient(circle at bottom left, #3BAAFC 0%, #6D7CFD 20%, #77C3FD 50%, #9ad3fe  75%)',
 const theme = {
   colors: {
-    primary: '#6375f0', // Blue
+    primary: '#6375f0',
     primaryHover: '#4f61e6',
-    secondary: '#64748b', // Slate
-    background: 'linear-gradient(to right, #6D7CFD, #77C3FD , #3BAAFC)',
+    secondary: '#64748b',
+    background: 'linear-gradient(to right, #6D7CFD, #77C3FD, #3BAAFC)',
     white: '#ffffff',
     text: '#262626',
     textLight: '#64748b',
-    success: '#10b981', // Green
-    error: '#ef4444', // Red
-    warning: '#f59e0b', // Amber
-    info: '#3b82f6', // Blue
+    success: '#10b981',
+    error: '#ef4444',
+    warning: '#f59e0b',
+    info: '#3b82f6',
     border: '#e2e8f0',
     inputBg: '#ffffff',
     disabled: '#e2e8f0',

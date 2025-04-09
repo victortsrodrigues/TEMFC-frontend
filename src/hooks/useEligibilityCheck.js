@@ -45,7 +45,7 @@ const useEligibilityCheck = () => {
   const checkUserEligibilitySSE = useCallback(
     (userData) => {
       setLoading(true);
-      setProgress({ step: 0, message: "Initializing...", percentage: 0 });
+      setProgress({ step: 0, message: "Iniciando...", percentage: 0 });
       setResult(null);
       setError(null);
 
@@ -86,7 +86,7 @@ const useEligibilityCheck = () => {
           ) {
             setProgress((prev) => ({
               ...prev,
-              message: errorData.error || "Error occurred",
+              message: errorData.error || "Ocorreu um erro durante o processo.",
               status: "error",
             }));
           }

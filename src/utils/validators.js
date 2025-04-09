@@ -7,7 +7,7 @@ export const validateCPF = (cpf) => {
   if (numericCPF.length !== 11) {
     return {
       isValid: false,
-      error: 'CPF must have exactly 11 digits'
+      error: 'CPF deve conter 11 dígitos.'
     };
   }
   
@@ -22,7 +22,7 @@ export const validateName = (name) => {
   if (!name || name.trim() === '') {
     return {
       isValid: false,
-      error: 'Name cannot be empty'
+      error: 'Nome completo não pode estar vazio.'
     };
   }
   

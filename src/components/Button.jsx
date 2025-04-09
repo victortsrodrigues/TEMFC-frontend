@@ -71,7 +71,7 @@ const StyledButton = styled.button`
       case 'lg':
         return css`
           padding: ${`${theme.spacing[3]} ${theme.spacing[6]}`};
-          font-size: ${theme.fontSizes.lg};
+          font-size: ${theme.fontSizes.md};
         `;
       default:
         return css`

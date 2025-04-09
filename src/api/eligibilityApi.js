@@ -71,24 +71,14 @@ export const checkEligibilitySSE = (userData, callbacks) => {
         }
         eventSource.close();
       });
-      
-      // Handle general SSE errors
-      eventSource.onerror = () => {
-        callbacks.onError?.({ 
-          error: 'SSE connection error', 
-          status_code: 503,
-          details: { source: 'connection' }
-        });
-        eventSource.close();
-      };
-      
+            
       return eventSource;
     })
     .catch(error => {
       // Handle network or request error
       callbacks.onError?.(
         error.response?.data || { 
-          error: 'Network error occurred', 
+          error: 'Erro de conexão com o servidor', 
           status_code: error.response?.status || 500,
           details: { source: 'network' }
         }

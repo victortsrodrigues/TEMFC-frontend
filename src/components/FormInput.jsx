@@ -6,8 +6,8 @@ const InputContainer = styled.div`
   flex-direction: column;
   margin-bottom: ${({ theme }) => theme.spacing[4]};
   width: 100%;
-  padding-left: ${({ theme }) => theme.spacing[8]};
-  padding-right: ${({ theme }) => theme.spacing[8]};
+  padding-left: ${({ theme }) => theme.spacing[16]};
+  padding-right: ${({ theme }) => theme.spacing[16]};
 `;
 
 const Label = styled.label`
