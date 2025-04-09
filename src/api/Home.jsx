@@ -8,8 +8,6 @@ import CriteriaDialog from "../components/CriteriaDialog";
 import { useNotification } from "../contexts/NotificationContext";
 import useEligibilityCheck from "../hooks/useEligibilityCheck";
 
-import homeImage from "../assets/home-image.svg";
-
 const PageContainer = styled.div`
   min-height: 100vh;
   display: flex;
@@ -59,7 +57,7 @@ const FeatureItem = styled.li`
 const LinkGroup = styled.div`
   display: flex;
   align-items: center;
-  gap: ${({ theme }) => theme.spacing[4]};
+  gap: ${({ theme }) => theme.spacing[4]}; /* Alterado: espaçamento entre links */
   margin-bottom: ${({ theme }) => theme.spacing[8]};
   flex-wrap: wrap;
 `;
@@ -67,7 +65,7 @@ const LinkGroup = styled.div`
 const CTAButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
-  font-size: ${({ theme }) => theme.fontSizes.lg};
+  font-size: ${({ theme }) => theme.fontSizes.lg}; /* Alterado: maior para chamar atenção */
   padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
   border-radius: ${({ theme }) => theme.borderRadius.md};
   border: none;
@@ -110,6 +108,24 @@ const Subtitle = styled.p`
   opacity: 0.9;
 `;
 
+const InfoSection = styled.div`
+  margin-bottom: ${({ theme }) => theme.spacing[8]};
+`;
+
+const InfoTitle = styled.h3`
+  color: ${({ theme }) => theme.colors.white};
+  margin-bottom: ${({ theme }) => theme.spacing[3]};
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+`;
+
+const InfoText = styled.p`
+  color: ${({ theme }) => theme.colors.white};
+  font-size: ${({ theme }) => theme.fontSizes.md};
+  margin-bottom: ${({ theme }) => theme.spacing[2]};
+  opacity: 0.9;
+  line-height: 1.6;
+`;
+
 const InfoLink = styled.a`
   color: ${({ theme }) => theme.colors.white};
   text-decoration: underline;
@@ -133,7 +149,7 @@ const HomeImage = styled.img`
   transition: all 0.5s ease;
   opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
   transform: ${({ isVisible }) => (isVisible ? 'translateY(0)' : 'translateY(-20px)')};
-  position: ${({ isAbsolute }) => isAbsolute ? 'absolute' : 'relative'};
+  position: ${({ absolute }) => absolute ? 'absolute' : 'relative'};
 `;
 
 const ImageContainer = styled.div`
@@ -152,8 +168,6 @@ const ErrorContainer = styled.div`
   box-shadow: ${({ theme }) => theme.shadows.md};
   border-left: 4px solid ${({ theme }) => theme.colors.error};
   margin-bottom: ${({ theme }) => theme.spacing[6]};
-  width: 100%;
-  max-width: 500px;
 `;
 
 const ErrorTitle = styled.h3`
@@ -299,10 +313,10 @@ const Home = () => {
       <ImageContainer>
         {showImage && (
           <HomeImage 
-            src={homeImage || "/src/assets/home-image.svg"}
+            src="src/assets/home-image.svg" 
             alt="TEMFC 36 Verificador" 
             isVisible={showImage} 
-            isAbsolute={showForm}
+            absolute={showForm}
           />
         )}
         
@@ -364,7 +378,7 @@ const Home = () => {
       </LeftSection>
 
       <RightSection>
-        {renderContent()}
+        <ContentContainer>{renderContent()}</ContentContainer>
 
         {notification && (
           <Alert

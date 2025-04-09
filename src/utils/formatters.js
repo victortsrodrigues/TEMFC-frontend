@@ -27,9 +27,11 @@ export const formatDecimal = (value) => {
 export const formatStatus = (status) => {
   if (!status) return '';
   
-  // Convert "ELIGIBLE" to "Eligible" and "NOT_ELIGIBLE" to "Not Eligible"
-  return status
-    .split('_')
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+  if (status === 'ELIGIBLE') {
+    return 'Apto';
+  } else if (status === 'NOT_ELIGIBLE') {
+    return 'Inapto';
+  } else {
+    return status;
+  }
 };

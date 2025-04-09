@@ -12,7 +12,7 @@ const FormContainer = styled.form`
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   box-shadow: ${({ theme }) => theme.shadows.md};
   width: 100%;
-  /* max-width: 500px; */
+  max-width: 500px;
   /* margin: 0 auto; */
 `;
 

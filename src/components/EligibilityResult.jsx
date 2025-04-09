@@ -101,7 +101,14 @@ const EligibilityResult = ({ result, onReset }) => {
   if (!result) return null;
 
   const { status, name, valid_months, pending_months, details } = result;
-  console.log(result);
+
+  const handleReset = () => {
+    if (onReset) {
+      // Call the reset function from parent component
+      onReset();
+    }
+  };
+  
   return (
     <ResultContainer>
       <StatusIndicator>
@@ -128,7 +135,7 @@ const EligibilityResult = ({ result, onReset }) => {
       </InfoSection>
 
       <ButtonContainer>
-        <Button onClick={onReset} variant="outline" size="md">
+        <Button onClick={handleReset} variant="outline" size="md">
           Fazer outra verificação
         </Button>
       </ButtonContainer>
