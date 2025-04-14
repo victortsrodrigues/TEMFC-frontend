@@ -6,7 +6,7 @@ const theme = {
     primaryHover: '#4f61e6',
     secondary: '#64748b',
     terciary: '#3BAAFC',
-    background: 'linear-gradient(to right, #6D7CFD, #77C3FD, #3BAAFC)',
+    background: 'linear-gradient(to left, #6D7CFD, #77C3FD, #3BAAFC)',
     white: '#ffffff',
     text: '#262626',
     textLight: '#64748b',

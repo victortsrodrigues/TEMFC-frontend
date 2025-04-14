@@ -7,7 +7,6 @@ import Alert from "../components/Alert";
 import CriteriaDialog from "../components/CriteriaDialog";
 import { useNotification } from "../contexts/NotificationContext";
 import useEligibilityCheck from "../hooks/useEligibilityCheck";
-
 import homeImage from "../assets/home-image.svg";
 
 const PageContainer = styled.div`
@@ -65,17 +64,16 @@ const LinkGroup = styled.div`
   flex-wrap: wrap;
 `;
 
-// Hero CTA Button com estilo aprimorado
 const CTAButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
   display: block;
   width: 100%;
-  max-width: 360px;                        /* cap na largura */
+  max-width: 360px;
   margin: ${({ theme }) => theme.spacing[0]} auto ${({ theme }) => theme.spacing[8]};
-  font-size: 1.25rem;                      /* 20px para destaque */
-  padding: ${({ theme }) => `${theme.spacing[4]} ${theme.spacing[10]}`}; /* 16px 40px */
-  min-height: 3.5rem;                      /* 56px touch target */
+  font-size: 1.25rem;
+  padding: ${({ theme }) => `${theme.spacing[4]} ${theme.spacing[10]}`};
+  min-height: 3.5rem;
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   border: none;
   box-shadow: 0 4px 12px rgba(99, 117, 240, 0.3);
@@ -119,6 +117,7 @@ const Title = styled.h1`
 const Subtitle = styled.p`
   color: ${({ theme }) => theme.colors.white};
   font-size: ${({ theme }) => theme.fontSizes['2xl']};
+  font-weight: ${({ theme }) => theme.fontWeights.medium};
   margin-bottom: ${({ theme }) => theme.spacing[6]};
   opacity: 0.9;
 `;
@@ -136,17 +135,30 @@ const InfoLink = styled.a`
 const ContentContainer = styled.div`
   width: 100%;
   max-width: 500px;
-  transition: opacity 0.5s ease;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
+  position: relative;
+  opacity: ${props => props.$isVisible ? 1 : 0};
+  transform: translateY(${props => props.$isVisible ? '0' : '20px'});
+  transition: 
+    opacity 0.4s 0.1s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
 `;
 
 const HomeImage = styled.img`
   max-width: 85%;
   height: auto;
-  transition: all 0.5s ease;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  transform: ${({ isVisible }) => (isVisible ? 'translateY(0)' : 'translateY(-20px)')};
-  position: ${({ isAbsolute }) => isAbsolute ? 'absolute' : 'relative'};
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%)
+    scale(${props => props.$isVisible ? 1 : 0.95})
+    translateY(${props => props.$isExiting ? '-20px' : '0'});
+  opacity: ${props => props.$isVisible ? 1 : 0};
+  transition: 
+    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: opacity, transform;
+  pointer-events: none;
 `;
 
 const ImageContainer = styled.div`
@@ -183,6 +195,8 @@ const ErrorMessage = styled.p`
 const Home = () => {
   const [showForm, setShowForm] = useState(false);
   const [showImage, setShowImage] = useState(true);
+  // Change 1: Add new state for staggered animation control
+  const [transitionStage, setTransitionStage] = useState('image-visible');
   const {
     loading,
     progress,
@@ -199,14 +213,23 @@ const Home = () => {
   const formContainerRef = useRef(null);
 
   // Handle smooth transition from image to form
+  // Change 2: Optimized transition handler using requestAnimationFrame
   const handleCTAClick = () => {
-    setShowImage(false);
-    setTimeout(() => {
-      setShowForm(true);
-      if (formContainerRef.current) {
-        formContainerRef.current.scrollIntoView({ behavior: 'smooth' });
-      }
-    }, 500); // Match the transition time with CSS
+    // Start exit animation for image
+    setTransitionStage('image-exit');
+    
+    // Use rAF for smooth animation sequencing
+    requestAnimationFrame(() => {
+      // Start form entrance after image exit starts
+      setTransitionStage('form-enter');
+      
+      // Scroll after animations complete
+      setTimeout(() => {
+        if (formContainerRef.current) {
+          formContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    });
   };
 
   // Handle form submission
@@ -307,23 +330,21 @@ const Home = () => {
       return <EligibilityResult result={result} onReset={handleReset} />;
     }
 
-    // Otherwise, show the form or image based on state
     return (
       <ImageContainer>
-        {showImage && (
-          <HomeImage 
-            src={homeImage || "/src/assets/home-image.svg"}
-            alt="TEMFC 36 Verificador" 
-            isVisible={showImage} 
-            isAbsolute={showForm}
-          />
-        )}
+        <HomeImage 
+          src={homeImage || "/src/assets/home-image.svg"}
+          alt="TEMFC 36 Verificador" 
+          $isVisible={transitionStage === 'image-visible'}
+          $isExiting={transitionStage === 'image-exit'}
+        />
         
-        {showForm && (
-          <ContentContainer isVisible={showForm} ref={formContainerRef}>
-            <UserForm onSubmit={handleSubmit} isLoading={loading} />
-          </ContentContainer>
-        )}
+        <ContentContainer 
+          $isVisible={transitionStage === 'form-enter'}
+          ref={formContainerRef}
+        >
+          <UserForm onSubmit={handleSubmit} isLoading={loading} />
+        </ContentContainer>
       </ImageContainer>
     );
   };
@@ -353,7 +374,7 @@ const Home = () => {
         </Description>
 
         <FeatureList>
-          <FeatureItem>Resultado em poucos segundos.</FeatureItem>
+          <FeatureItem>Resultado em menos de 1 minuto.</FeatureItem>
           <FeatureItem>Seguro e confidencial.</FeatureItem>
           <FeatureItem>100% gratuito.</FeatureItem>
         </FeatureList>

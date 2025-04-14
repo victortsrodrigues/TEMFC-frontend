@@ -8,6 +8,8 @@ const LoadingContainer = styled.div`
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   box-shadow: ${({ theme }) => theme.shadows.md};
   text-align: center;
+  width: 100%;
+  max-width: 500px;
 `;
 
 const LoadingTitle = styled.h3`

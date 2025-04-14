@@ -1,5 +1,5 @@
 import { useState, useCallback } from "react";
-import { checkEligibility, checkEligibilitySSE } from "../api/eligibilityApi";
+import { checkEligibilitySSE } from "../api/eligibilityApi";
 
 const useEligibilityCheck = () => {
   const [loading, setLoading] = useState(false);
@@ -27,19 +27,6 @@ const useEligibilityCheck = () => {
     }
     setLoading(false);
   }, [eventSource]);
-
-  // const checkUserEligibilitySSE = (userData) => {
-  //   setLoading(true);
-  //   setProgress(0);
-
-  //   // Comment out the rest of the function to prevent it from completing
-  //   // Just add this line to simulate progress updates
-  //   const interval = setInterval(() => {
-  //     setProgress(prev => Math.min(prev + 5, 95)); // Never reaches 100%
-  //   }, 500);
-
-  //   return () => clearInterval(interval);
-  // };
 
   // Check eligibility using SSE
   const checkUserEligibilitySSE = useCallback(
@@ -100,29 +87,12 @@ const useEligibilityCheck = () => {
     [progress.percentage]
   );
 
-  // Fallback to regular HTTP request
-  const checkUserEligibility = useCallback(async (userData) => {
-    setLoading(true);
-    setResult(null);
-    setError(null);
-
-    try {
-      const data = await checkEligibility(userData);
-      setResult(data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   return {
     loading,
     progress,
     result,
     error,
     checkUserEligibilitySSE,
-    checkUserEligibility,
     cancelRequest,
     resetState,
   };

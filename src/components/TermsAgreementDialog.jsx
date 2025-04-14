@@ -46,7 +46,7 @@ const DialogHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: ${({ theme }) => theme.spacing[6]} ${({ theme }) => theme.spacing[6]} ${({ theme }) => theme.spacing[3]};
+  padding: ${({ theme }) => theme.spacing[6]} ${({ theme }) => theme.spacing[6]} ${({ theme }) => theme.spacing[1]};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
@@ -224,9 +224,10 @@ const TermsAgreementDialog = ({ isOpen, closeDialog, onContinue }) => {
                       onChange={handleCheckboxChange}
                     />
                     <LabelText>
-                      Eu concordo que esta avaliação considera o histórico até
-                      fevereiro de 2025 e que dados posteriores a esta data não
-                      serão incluídos na análise.
+                      Atualmente o CNES disponibiliza registros até fevereiro de 2025. 
+                      Sabendo disso, eu concordo que esta avaliação considera o 
+                      histórico profissional até fevereiro de 2025 e que dados 
+                      posteriores a esta data não serão incluídos na análise.
                     </LabelText>
                   </CheckboxLabel>
 
