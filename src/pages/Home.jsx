@@ -25,15 +25,16 @@ const LeftSection = styled.div`
   margin-left: ${({ theme }) => theme.spacing[4]};
   padding: ${({ theme }) => theme.spacing[8]};
   color: ${({ theme }) => theme.colors.white};
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    margin-left: 0; // Remove left margin on mobile
+    margin-left: 0;
     padding: ${({ theme }) => theme.spacing[6]};
     text-align: center;
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing[4]}; // Even smaller padding on small screens
+    padding: ${({ theme }) => theme.spacing[4]};
   }
 `;
 
@@ -86,8 +87,8 @@ const CTAButton = styled.button`
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    max-width: 100%; // Full width on small screens
-    padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`}; // Smaller padding
+    max-width: 100%;
+    padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
   }
   
   &:hover {
@@ -108,14 +109,13 @@ const RightSection = styled.div`
   padding: ${({ theme }) => theme.spacing[4]};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    // Center the form/loading/results content
-    min-height: 100vh; // Ensure enough space for the form
+    min-height: 100vh;
     justify-content: center;
     align-items: center;
-    padding-top: ${({ theme }) => theme.spacing[8]}; // Add more padding at top
-    padding-bottom: ${({ theme }) => theme.spacing[8]}; // Add more padding at bottom
-    margin-top: ${({ theme }) => theme.spacing[6]}; // Create separation from left section
-    scroll-margin-top: 20px; // Helps with scroll positioning
+    padding-top: ${({ theme }) => theme.spacing[8]};
+    padding-bottom: ${({ theme }) => theme.spacing[8]};
+    margin-top: ${({ theme }) => theme.spacing[6]};
+    scroll-margin-top: 20px;
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
@@ -135,7 +135,7 @@ const Title = styled.h1`
   line-height: 1.2;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: ${({ theme }) => theme.fontSizes["4xl"]}; // Smaller font on mobile
+    font-size: ${({ theme }) => theme.fontSizes["4xl"]};
   }
 `;
 
@@ -169,7 +169,6 @@ const ContentContainer = styled.div`
   will-change: opacity, transform;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    // Make sure the container is properly centered
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -227,7 +226,6 @@ const ErrorMessage = styled.p`
 
 const Home = () => {
   const [transitionStage, setTransitionStage] = useState('image-visible');
-  // Add state to track if the button should be hidden
   const [hideButton, setHideButton] = useState(false);
 
   const {
@@ -242,15 +240,12 @@ const Home = () => {
 
   // Reference for the form container
   const formContainerRef = useRef(null);
-  const rightSectionRef = useRef(null); // Add ref for the right section
+  const rightSectionRef = useRef(null);
 
-  // Handle smooth transition from image to form
   const handleCTAClick = () => {
-    
     setHideButton(true);
     setTransitionStage('image-exit');
     
-    // Use rAF for smooth animation sequencing
     requestAnimationFrame(() => {
       setTransitionStage('form-enter');
       setTimeout(() => {
@@ -277,12 +272,9 @@ const Home = () => {
   // Reset the form and state
   const handleReset = () => {
     resetState();
-    // Keep the button hidden as we're going back to the form
     setHideButton(true);
-    // Keep the form enter stage
     setTransitionStage('form-enter');
     
-    // Scroll back to the form
     setTimeout(() => {
       if (rightSectionRef.current) {
         const top = rightSectionRef.current.getBoundingClientRect().top + window.scrollY;
@@ -299,12 +291,9 @@ const Home = () => {
   const renderError = () => {
     if (!error) return null;
 
-    // Extract error details for display
     const errorTitle = error.error || "Error";
 
-    // Generate appropriate error message based on error details
     const errorMessage = (() => {
-      // Handle specific status codes
       if (error.status_code === 404) {
         return "Por favor, verifique os dados e tente novamente.";
       } else if (error.status_code === 422) {
@@ -315,29 +304,24 @@ const Home = () => {
         return "Por favor, tente novamente mais tarde.";
       }
 
-      // Check for data retrieval errors
       if (error.details?.source === "data_retrieval") {
         return `Could not find user data with the provided information. ${
           error.error || ""
         }`;
       }
 
-      // Connection errors
       if (error.details?.source === "connection") {
         return "Connection to the server was lost. Please check your internet connection and try again.";
       }
 
-      // Network errors
       if (error.details?.source === "network") {
         return "Network error occurred. Please check your internet connection and try again.";
       }
 
-      // Progress event errors
       if (error.details?.source === "progress") {
         return `Error during processing: ${error.error || "Unknown error"}`;
       }
 
-      // Default error message as fallback
       return error.error || "An unexpected error occurred. Please try again.";
     })();
 
@@ -351,7 +335,6 @@ const Home = () => {
 
   // Determine what content to show
   const renderContent = () => {
-    // If there's an error, we still show the form below the error message
     if (error) {
       return (
         <>
@@ -361,7 +344,6 @@ const Home = () => {
       );
     }
     
-    // If still loading, show the loading component
     if (loading) {
       return (
         <Loading
@@ -374,7 +356,6 @@ const Home = () => {
       );
     }
 
-    // If there's a result, show the result component
     if (result) {
       return <EligibilityResult result={result} onReset={handleReset} />;
     }
@@ -435,10 +416,10 @@ const Home = () => {
             rel="noopener noreferrer"
           >
             Edital Atual
-          </InfoLink> {/* Mantido: link edital */}
+          </InfoLink>
           <InfoLink href="#" onClick={(e) => { e.preventDefault(); openDialog(); }}>
             Critérios de Cálculo
-          </InfoLink> {/* Mantido: link abre diálogo */}
+          </InfoLink>
         </LinkGroup>
 
         <CTAButton
@@ -446,7 +427,7 @@ const Home = () => {
           disabled={hideButton}
           title={hideButton ? 'Boa sorte!' : ''}
         >
-          Verificar Agora
+          {hideButton ? 'Boa sorte!' : 'Verificar Agora'}
         </CTAButton>
       </LeftSection>
 
