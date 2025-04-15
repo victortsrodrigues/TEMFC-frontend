@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import EligibilityResult from "../components/EligibilityResult";
 import Loading from "../components/Loading";
-import Alert from "../components/Alert";
 import CriteriaDialog from "../components/CriteriaDialog";
-import { useNotification } from "../contexts/NotificationContext";
 import useEligibilityCheck from "../hooks/useEligibilityCheck";
 import homeImage from "../assets/home-image.svg";
 
@@ -193,9 +191,6 @@ const ErrorMessage = styled.p`
 `;
 
 const Home = () => {
-  const [showForm, setShowForm] = useState(false);
-  const [showImage, setShowImage] = useState(true);
-  // Change 1: Add new state for staggered animation control
   const [transitionStage, setTransitionStage] = useState('image-visible');
   const {
     loading,
@@ -207,13 +202,10 @@ const Home = () => {
     resetState,
   } = useEligibilityCheck();
 
-  const { notification, notifyError, clearNotification } = useNotification();
-
   // Reference for the form container
   const formContainerRef = useRef(null);
 
   // Handle smooth transition from image to form
-  // Change 2: Optimized transition handler using requestAnimationFrame
   const handleCTAClick = () => {
     // Start exit animation for image
     setTransitionStage('image-exit');
@@ -241,13 +233,6 @@ const Home = () => {
   const handleReset = () => {
     resetState();
   };
-
-  // Reset to initial state if needed
-  useEffect(() => {
-    if (!loading && !result && !error && !showForm) {
-      setShowImage(true);
-    }
-  }, [loading, result, error, showForm]);
 
   // Display any API errors with improved error handling
   const renderError = () => {
@@ -295,9 +280,6 @@ const Home = () => {
       return error.error || "An unexpected error occurred. Please try again.";
     })();
 
-    // Find the most useful details to display
-    const displayDetails = error.details?.details || error.details || {};
-
     return (
       <ErrorContainer>
         <ErrorTitle>{errorTitle}</ErrorTitle>
@@ -321,7 +303,14 @@ const Home = () => {
     // If still loading, show the loading component
     if (loading) {
       return (
-        <Loading message="Processando sua solicitação..." progress={progress} />
+        <Loading
+          message="Processando sua solicitação..."
+          progress={progress}
+          onCancel={() => {
+            cancelRequest();
+            notifyInfo("Solicitação cancelada pelo usuário.");
+          }}
+        />
       );
     }
 
@@ -399,14 +388,6 @@ const Home = () => {
 
       <RightSection>
         {renderContent()}
-
-        {notification && (
-          <Alert
-            type={notification.type}
-            message={notification.message}
-            onClose={clearNotification}
-          />
-        )}
       </RightSection>
       <CriteriaDialog isOpen={isOpen} closeDialog={closeDialog} />
     </PageContainer>

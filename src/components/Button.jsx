@@ -1,5 +1,6 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
+import PropTypes from 'prop-types';
 
 // Styled button component
 const StyledButton = styled.button`
@@ -13,7 +14,7 @@ const StyledButton = styled.button`
   transition: all ${({ theme }) => theme.transitions.fast};
   cursor: pointer;
   
-  /* Button variants */
+  // Button variants
   ${({ variant, theme }) => {
     switch (variant) {
       case 'primary':
@@ -60,7 +61,7 @@ const StyledButton = styled.button`
     }
   }}
   
-  /* Button sizes */
+  // Button sizes
   ${({ size, theme }) => {
     switch (size) {
       case 'sm':
@@ -81,14 +82,14 @@ const StyledButton = styled.button`
     }
   }}
   
-  /* Full width option */
+  // Full width option
   ${({ fullWidth }) =>
     fullWidth &&
     css`
       width: 100%;
     `}
   
-  /* Disabled state */
+  // Disabled state
   &:disabled {
     background-color: ${({ theme }) => theme.colors.disabled};
     color: ${({ theme }) => theme.colors.textLight};
@@ -119,6 +120,16 @@ const Button = ({
       {children}
     </StyledButton>
   );
+};
+
+Button.propTypes = {
+  children: PropTypes.node,
+  variant: PropTypes.oneOf(['primary', 'secondary', 'outline']),
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  fullWidth: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onClick: PropTypes.func,
 };
 
 export default Button;

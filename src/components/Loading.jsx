@@ -1,6 +1,8 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from 'prop-types';
 import { MagnifyingGlass } from "react-loader-spinner";
+import Button from "./Button";
 
 const LoadingContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
@@ -28,102 +30,17 @@ const LoadingAlert = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.xs};
 `;
 
-const ProgressContainer = styled.div`
-  width: 100%;
-  background-color: ${({ theme }) => theme.colors.background};
-  border-radius: ${({ theme }) => theme.borderRadius.full};
-  height: 12px;
-  margin-bottom: ${({ theme }) => theme.spacing[3]};
-  overflow: hidden;
-`;
-
-const ProgressBar = styled.div`
-  height: 100%;
-  background-color: ${({ theme, status }) =>
-    status === "error"
-      ? theme.colors.error
-      : status === "completed"
-      ? theme.colors.success
-      : theme.colors.primary};
-  width: ${({ percentage }) => `${percentage}%`};
-  transition: width 0.3s ease;
-`;
-
-const StepIndicator = styled.div`
+const ButtonContainer = styled.div`
   display: flex;
-  justify-content: space-between;
-  margin: ${({ theme }) => theme.spacing[4]} 0;
-`;
-
-const Step = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex: 1;
-  position: relative;
-
-  &:not(:last-child)::after {
-    content: "";
-    position: absolute;
-    top: 12px;
-    left: 50%;
-    width: 100%;
-    height: 2px;
-    background-color: ${({ theme, active, completed }) =>
-      completed
-        ? theme.colors.success
-        : active
-        ? theme.colors.primary
-        : theme.colors.background};
-  }
-`;
-
-const StepCircle = styled.div`
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background-color: ${({ theme, active, completed }) =>
-    completed
-      ? theme.colors.success
-      : active
-      ? theme.colors.primary
-      : theme.colors.background};
-  display: flex;
-  align-items: center;
   justify-content: center;
-  margin-bottom: ${({ theme }) => theme.spacing[2]};
-  z-index: 1;
-`;
-
-const StepNumber = styled.span`
-  color: ${({ theme, active, completed }) =>
-    active || completed ? theme.colors.white : theme.colors.textLight};
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  font-weight: bold;
-`;
-
-const StepLabel = styled.span`
-  color: ${({ theme, active, completed }) =>
-    completed
-      ? theme.colors.success
-      : active
-      ? theme.colors.primary
-      : theme.colors.textLight};
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  text-align: center;
+  margin-top: ${({ theme }) => theme.spacing[6]};
 `;
 
 const Loading = ({
-  message = "Carregando...",
+  message = "Processando sua solicitação...",
   progress = { step: 0, message: "", percentage: 0, status: "in_progress" },
+  onCancel,
 }) => {
-  const steps = [
-    { number: 1, label: "Data Retrieval" },
-    { number: 2, label: "Validation" },
-    { number: 3, label: "Processing" },
-  ];
-
-  const currentStep = progress.step || 0;
 
   return (
     <LoadingContainer>
@@ -141,15 +58,34 @@ const Loading = ({
       />
           
       <LoadingMessage>
-        {progress.message || `Step ${currentStep}: Processing...`}
+        {progress.message || "Estamos processando sua solicitação."}
       </LoadingMessage>
 
       <LoadingAlert>
       Isto pode demorar alguns segundos
       </LoadingAlert>
-    
+
+      {onCancel && (
+        <ButtonContainer>
+          <Button onClick={onCancel} variant="outline" size="md">
+            Cancelar Solicitação
+          </Button>
+        </ButtonContainer>
+      )}
+
     </LoadingContainer>
   );
+};
+
+Loading.propTypes = {
+  message: PropTypes.string,
+  progress: PropTypes.shape({
+    step: PropTypes.number,
+    message: PropTypes.string,
+    percentage: PropTypes.number,
+    status: PropTypes.oneOf(["progress", "completed", "error", "result", "connected"]),
+  }),
+  onCancel: PropTypes.func,
 };
 
 export default Loading;

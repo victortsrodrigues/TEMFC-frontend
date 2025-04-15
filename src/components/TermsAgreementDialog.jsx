@@ -1,5 +1,6 @@
 import React, { useRef, Fragment, useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import {
   Dialog,
   DialogPanel,
@@ -180,7 +181,9 @@ const TermsAgreementDialog = ({ isOpen, closeDialog, onContinue }) => {
         onClose={closeDialog}
         initialFocus={cancelButtonRef}
       >
-        <Transition.Child
+        <Transition
+          appear
+          show={isOpen}
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -190,10 +193,12 @@ const TermsAgreementDialog = ({ isOpen, closeDialog, onContinue }) => {
           leaveTo="opacity-0"
         >
           <StyledDialogOverlay />
-        </Transition.Child>
+        </Transition>
 
         <StyledDialogContainer>
-          <Transition.Child
+          <Transition
+            appear
+            show={isOpen}
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
@@ -224,9 +229,9 @@ const TermsAgreementDialog = ({ isOpen, closeDialog, onContinue }) => {
                       onChange={handleCheckboxChange}
                     />
                     <LabelText>
-                      Atualmente o CNES disponibiliza registros até fevereiro de 2025. 
+                      Atualmente o CNES disponibiliza registros até março de 2025. 
                       Sabendo disso, eu concordo que esta avaliação considera o 
-                      histórico profissional até fevereiro de 2025 e que dados 
+                      histórico profissional até março de 2025 e que dados 
                       posteriores a esta data não serão incluídos na análise.
                     </LabelText>
                   </CheckboxLabel>
@@ -265,11 +270,17 @@ const TermsAgreementDialog = ({ isOpen, closeDialog, onContinue }) => {
                 </ConfirmButton>
               </DialogFooter>
             </StyledDialogPanel>
-          </Transition.Child>
+          </Transition>
         </StyledDialogContainer>
       </Dialog>
     </Transition>
   );
+};
+
+TermsAgreementDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  closeDialog: PropTypes.func.isRequired,
+  onContinue: PropTypes.func.isRequired,
 };
 
 export default TermsAgreementDialog;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import FormInput from "./FormInput";
 import Button from "./Button";
 import TermsAgreementDialog from "./TermsAgreementDialog";
@@ -13,7 +14,6 @@ const FormContainer = styled.form`
   box-shadow: ${({ theme }) => theme.shadows.md};
   width: 100%;
   max-width: 500px;
-  /* margin: 0 auto; */
 `;
 
 const FormTitle = styled.h3`
@@ -28,15 +28,6 @@ const FormDescription = styled.p`
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing[6]};
   font-size: ${({ theme }) => theme.fontSizes.sm};
-`;
-
-const FormFooter = styled.p`
-  font-size: ${({ theme }) => theme.fontSizes.xs};
-  color: ${({ theme }) => theme.colors.textLight};
-  /* text-align: center; */
-  font-size: ${({ theme }) => theme.fontSizes.sm};
-  padding-left: ${({ theme }) => theme.spacing[8]};
-  padding-right: ${({ theme }) => theme.spacing[8]};
 `;
 
 const ButtonContainer = styled.div`
@@ -139,12 +130,6 @@ const UserForm = ({ onSubmit, isLoading }) => {
     });
 
     setShowTermsDialog(true);
-
-    // If valid, submit the formatted data
-    // onSubmit({
-    //   cpf: validation.formattedData.cpf,
-    //   name: validation.formattedData.name
-    // });
   };
 
   const handleTermsAccepted = () => {
@@ -171,7 +156,7 @@ const UserForm = ({ onSubmit, isLoading }) => {
           helperText="Insira os 11 dígitos do seu CPF, sem pontos ou traços."
           required
           disabled={isLoading}
-          maxLength={14} // Including formatting characters
+          maxLength={14}
         />
 
         <FormInput
@@ -207,6 +192,11 @@ const UserForm = ({ onSubmit, isLoading }) => {
       />
     </>
   );
+};
+
+UserForm.propTypes = {
+  onSubmit: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default UserForm;

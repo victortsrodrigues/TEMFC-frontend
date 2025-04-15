@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import PropTypes from 'prop-types';
 
 const InputContainer = styled.div`
   display: flex;
@@ -101,6 +102,21 @@ const FormInput = ({
       {helperText && !error && <HelperText>{helperText}</HelperText>}
     </InputContainer>
   );
+};
+
+FormInput.propTypes = {
+  id: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  onBlur: PropTypes.func,
+  error: PropTypes.string.isRequired,
+  helperText: PropTypes.string.isRequired,
+  required: PropTypes.bool,
+  disabled: PropTypes.bool,
+  placeholder: PropTypes.string.isRequired,
+  maxLength: PropTypes.number,
 };
 
 export default FormInput;

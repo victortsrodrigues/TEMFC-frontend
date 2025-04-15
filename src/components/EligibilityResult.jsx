@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import PropTypes from 'prop-types';
 import Button from "./Button";
 import { formatDecimal, formatStatus } from "../utils/formatters";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
@@ -96,15 +97,14 @@ const ButtonContainer = styled.div`
   justify-content: center;
   margin-top: ${({ theme }) => theme.spacing[6]};
 `;
-{/* <StatusBadge status={status}>{formatStatus(status)}</StatusBadge> */}
+
 const EligibilityResult = ({ result, onReset }) => {
   if (!result) return null;
 
-  const { status, name, valid_months, pending_months, details } = result;
+  const { status, name, valid_months, pending_months } = result;
 
   const handleReset = () => {
     if (onReset) {
-      // Call the reset function from parent component
       onReset();
     }
   };
@@ -143,26 +143,22 @@ const EligibilityResult = ({ result, onReset }) => {
   );
 };
 
+EligibilityResult.propTypes = {
+  result: PropTypes.shape({
+    status: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    valid_months: PropTypes.number.isRequired,
+    pending_months: PropTypes.number.isRequired,
+    details: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string,
+        value: PropTypes.string,
+      })
+    ).isRequired,
+  }).isRequired,
+  onReset: PropTypes.func,
+};
+
 export default EligibilityResult;
 
 
-// {details && (
-//   <InfoSection>
-//     <DetailTitle>Semester Details</DetailTitle>
-
-//     <InfoRow>
-//       <InfoLabel>20% Semesters</InfoLabel>
-//       <InfoValue>{details.semesters_20}</InfoValue>
-//     </InfoRow>
-
-//     <InfoRow>
-//       <InfoLabel>30% Semesters</InfoLabel>
-//       <InfoValue>{details.semesters_30}</InfoValue>
-//     </InfoRow>
-
-//     <InfoRow>
-//       <InfoLabel>40% Semesters</InfoLabel>
-//       <InfoValue>{details.semesters_40}</InfoValue>
-//     </InfoRow>
-//   </InfoSection>
-// )}

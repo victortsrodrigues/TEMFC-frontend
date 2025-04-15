@@ -6,8 +6,8 @@ import {
   DialogTitle,
   Transition,
 } from "@headlessui/react";
+import PropTypes from "prop-types";
 
-// Dialog Styled Components
 const StyledDialogOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -218,7 +218,9 @@ const CriteriaDialog = ({ isOpen, closeDialog }) => {
         onClose={closeDialog}
         initialFocus={buttonRef}
       >
-        <Transition.Child
+        <Transition
+          appear
+          show={isOpen}
           as={Fragment}
           enter="ease-out duration-300"
           enterFrom="opacity-0"
@@ -228,10 +230,12 @@ const CriteriaDialog = ({ isOpen, closeDialog }) => {
           leaveTo="opacity-0"
         >
           <StyledDialogOverlay aria-hidden="true" />
-        </Transition.Child>
+        </Transition>
 
         <StyledDialogContainer>
-          <Transition.Child
+          <Transition
+            appear
+            show={isOpen}
             as={Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95 translate-y-4"
@@ -394,11 +398,16 @@ const CriteriaDialog = ({ isOpen, closeDialog }) => {
                 </DialogButton>
               </DialogFooter>
             </StyledDialogPanel>
-          </Transition.Child>
+          </Transition>
         </StyledDialogContainer>
       </Dialog>
     </Transition>
   );
+};
+
+CriteriaDialog.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  closeDialog: PropTypes.func.isRequired,
 };
 
 export default CriteriaDialog;
