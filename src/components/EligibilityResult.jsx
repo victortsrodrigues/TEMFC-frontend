@@ -15,7 +15,7 @@ const ResultContainer = styled.div`
   margin: 0 auto;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing[4]}; // Less padding on small screens
+    padding: ${({ theme }) => theme.spacing[4]};
   }
 `;
 
@@ -27,21 +27,9 @@ const StatusIndicator = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     .dotlottie-container {
-      width: 250px !important; // Smaller lottie on mobile
+      width: 250px !important;
     }
   }
-`;
-
-const StatusBadge = styled.div`
-  padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[4]}`};
-  border-radius: ${({ theme }) => theme.borderRadius.full};
-  font-weight: ${({ theme }) => theme.fontWeights.bold};
-  font-size: ${({ theme }) => theme.fontSizes.md};
-  text-align: center;
-
-  background-color: ${({ status, theme }) =>
-    status === "ELIGIBLE" ? theme.colors.success : theme.colors.error};
-  color: ${({ theme }) => theme.colors.white};
 `;
 
 const ResultTitle = styled.h3`
@@ -93,17 +81,13 @@ const InfoValueText = styled.span`
   padding-left: ${({ theme }) => theme.spacing[2]};
   padding-right: ${({ theme }) => theme.spacing[2]};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   background-color: ${({ status, theme }) =>
     status === "ELIGIBLE" ? theme.colors.success : theme.colors.error};
   color: ${({ theme }) => theme.colors.white};
-`;
-
-const DetailTitle = styled.h4`
-  color: ${({ theme }) => theme.colors.text};
-  margin-bottom: ${({ theme }) => theme.spacing[3]};
-  font-weight: ${({ theme }) => theme.fontWeights.medium};
 `;
 
 const ButtonContainer = styled.div`

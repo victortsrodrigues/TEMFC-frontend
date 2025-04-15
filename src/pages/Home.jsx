@@ -1,11 +1,11 @@
 import React, { useState, useRef } from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import UserForm from "../components/UserForm";
 import EligibilityResult from "../components/EligibilityResult";
 import Loading from "../components/Loading";
 import CriteriaDialog from "../components/CriteriaDialog";
 import useEligibilityCheck from "../hooks/useEligibilityCheck";
-import homeImage from "../assets/home-image.svg";
+
 
 const PageContainer = styled.div`
   min-height: 100vh;
@@ -106,35 +106,19 @@ const LinkGroup = styled.div`
 const CTAButton = styled.button`
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.primary};
-  display: ${props => props.$hideButton ? 'none !important' : 'none'};
-  width: 100%;
-  max-width: 300px;
-  margin: ${({ theme }) => theme.spacing[0]} auto ${({ theme }) => theme.spacing[8]};
+  display: none;
   font-size: ${({ theme }) => theme.fontSizes.xl};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
-  padding: ${({ theme }) => `${theme.spacing[4]} ${theme.spacing[10]}`};
   min-height: 2.5rem;
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   border: none;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   transition: all 0.3s ease;
-  cursor: pointer;
-  opacity: ${props => props.disabled ? 0.6 : 1};
-  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    display: ${props => props.$hideButton ? 'none !important' : 'block'};
+    display: block;
     max-width: 100%;
     padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
-  }
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-  }
-
-  &:active {
-    transform: translateY(1px);
   }
 `;
 
@@ -208,7 +192,6 @@ const ContentContainer = styled.div`
   width: 100%;
   max-width: 500px;
   position: relative;
-  opacity: ${props => props.$isVisible ? 1 : 0};
   transform: translateY(${props => props.$isVisible ? '0' : '20px'});
   transition: 
     opacity 0.4s 0.1s cubic-bezier(0.4, 0, 0.2, 1),
@@ -221,23 +204,6 @@ const ContentContainer = styled.div`
     align-items: center;
     justify-content: center;
   }
-`;
-
-const HomeImage = styled.img`
-  max-width: 85%;
-  height: auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%)
-    scale(${props => props.$isVisible ? 1 : 0.95})
-    translateY(${props => props.$isExiting ? '-20px' : '0'});
-  opacity: ${props => props.$isVisible ? 1 : 0};
-  transition: 
-    opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: opacity, transform;
-  pointer-events: none;
 `;
 
 const ImageContainer = styled.div`
@@ -272,9 +238,6 @@ const ErrorMessage = styled.p`
 `;
 
 const Home = () => {
-  const [transitionStage, setTransitionStage] = useState('image-visible');
-  const [hideButton, setHideButton] = useState(false);
-
   const {
     loading,
     progress,
@@ -289,34 +252,14 @@ const Home = () => {
   const formContainerRef = useRef(null);
   const rightSectionRef = useRef(null);
 
-  const theme = useTheme();
-
   const handleCTAClick = () => {
-    setHideButton(true);
-    setTransitionStage('image-exit');
-    
     requestAnimationFrame(() => {
-      setTransitionStage('form-enter');
       setTimeout(() => {
         if (rightSectionRef.current) {
-          // On mobile/tablet, scroll so only the right section is visible
-          if (window.innerWidth <= parseInt(theme.breakpoints.md)) {
-            window.scrollTo({
-              top: rightSectionRef.current.offsetTop,
-              behavior: 'smooth'
-            });
-          } else {
-            // Original desktop behavior
-            const section = rightSectionRef.current;
-            const sectionHeight = section.offsetHeight;
-            const windowHeight = window.innerHeight;
-            const scrollTarget = section.offsetTop - (windowHeight - sectionHeight) / 2;
-    
-            window.scrollTo({
-              top: scrollTarget,
-              behavior: 'smooth',
-            });
-          }
+          window.scrollTo({
+            top: rightSectionRef.current.offsetTop,
+            behavior: 'smooth'
+          });
         }
       }, 40);
     });
@@ -330,8 +273,6 @@ const Home = () => {
   // Reset the form and state
   const handleReset = () => {
     resetState();
-    setHideButton(true);
-    setTransitionStage('form-enter');
     
     setTimeout(() => {
       if (rightSectionRef.current) {
@@ -428,16 +369,8 @@ const Home = () => {
     }
 
     return (
-      <ImageContainer>
-        <HomeImage 
-          src={homeImage || "/src/assets/home-image.svg"}
-          alt="TEMFC 36 Verificador" 
-          $isVisible={transitionStage === 'image-visible'}
-          $isExiting={transitionStage === 'image-exit'}
-        />
-        
-        <ContentContainer 
-          $isVisible={transitionStage === 'form-enter'}
+      <ImageContainer>       
+        <ContentContainer
           ref={formContainerRef}
         >
           <UserForm onSubmit={handleSubmit} isLoading={loading} />
@@ -491,10 +424,9 @@ const Home = () => {
 
         <CTAButton
           onClick={handleCTAClick}
-          disabled={hideButton}
-          title={hideButton ? 'Boa sorte!' : ''}
+          title="Verificar agora"
         >
-          {hideButton ? 'Boa sorte!' : 'Verificar Agora'}
+          Verificar agora
         </CTAButton>
       </LeftSection>
 

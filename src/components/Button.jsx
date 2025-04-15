@@ -2,7 +2,7 @@ import React from "react";
 import styled, { css } from "styled-components";
 import PropTypes from "prop-types";
 
-// Styled button component
+
 const StyledButton = styled.button`
   display: inline-flex;
   align-items: center;
@@ -15,7 +15,6 @@ const StyledButton = styled.button`
   cursor: pointer;
   letter-spacing: 0.01em;
 
-  // Adjust padding for small screens
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[3]}`};
   }

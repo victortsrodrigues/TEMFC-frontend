@@ -11,12 +11,12 @@ const InputContainer = styled.div`
   padding-right: ${({ theme }) => theme.spacing[16]};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding-left: ${({ theme }) => theme.spacing[8]}; // Less padding on medium screens
+    padding-left: ${({ theme }) => theme.spacing[8]};
     padding-right: ${({ theme }) => theme.spacing[8]};
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding-left: ${({ theme }) => theme.spacing[2]}; // Minimal padding on small screens
+    padding-left: ${({ theme }) => theme.spacing[2]};
     padding-right: ${({ theme }) => theme.spacing[2]};
   }
 `;
@@ -26,7 +26,7 @@ const Label = styled.label`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   margin-bottom: ${({ theme }) => theme.spacing[1]};
   margin-left: ${({ theme }) => theme.spacing[2]};
-  color: ${({ theme }) => theme.colors.primary}; // Changed to primary color
+  color: ${({ theme }) => theme.colors.primary};
   letter-spacing: 0.01em;
 `;
 
@@ -41,8 +41,8 @@ const InputField = styled.input`
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: ${({ theme }) => theme.fontSizes.md}; // Larger font on mobile for better touch input
-    padding: ${({ theme }) => theme.spacing[3]}; // More padding for better touch targets
+    font-size: ${({ theme }) => theme.fontSizes.md};
+    padding: ${({ theme }) => theme.spacing[3]};
   }
   
   &:focus {

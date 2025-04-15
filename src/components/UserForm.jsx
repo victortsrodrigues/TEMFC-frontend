@@ -11,26 +11,26 @@ const FormContainer = styled.form`
   background-color: ${({ theme }) => theme.colors.white};
   padding: ${({ theme }) => theme.spacing[6]};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
-  box-shadow: ${({ theme }) => theme.shadows.lg}; // Enhanced shadow
+  box-shadow: ${({ theme }) => theme.shadows.lg};
   width: 100%;
   max-width: 500px;
-  border: 1px solid rgba(0, 0, 0, 0.05); // Subtle border
+  border: 1px solid rgba(0, 0, 0, 0.05);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing[4]}; // Less padding on small screens
-    border-radius: ${({ theme }) => theme.borderRadius.lg}; // Smaller radius on mobile
+    padding: ${({ theme }) => theme.spacing[4]};
+    border-radius: ${({ theme }) => theme.borderRadius.lg};
   }
 `;
 
 const FormTitle = styled.h3`
-  color: ${({ theme }) => theme.colors.primary}; // Changed to primary color
+  color: ${({ theme }) => theme.colors.primary};
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing[1]};
   margin-top: ${({ theme }) => theme.spacing[2]};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: ${({ theme }) => theme.fontSizes.xl}; // Adjust font size for mobile
+    font-size: ${({ theme }) => theme.fontSizes.xl};
   }
 `;
 
@@ -50,12 +50,12 @@ const ButtonContainer = styled.div`
   padding-right: ${({ theme }) => theme.spacing[16]};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding-left: ${({ theme }) => theme.spacing[8]}; // Less padding on medium screens
+    padding-left: ${({ theme }) => theme.spacing[8]};
     padding-right: ${({ theme }) => theme.spacing[8]};
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding-left: ${({ theme }) => theme.spacing[2]}; // Minimal padding on small screens
+    padding-left: ${({ theme }) => theme.spacing[2]};
     padding-right: ${({ theme }) => theme.spacing[2]};
   }
 `;
@@ -86,7 +86,6 @@ const UserForm = ({ onSubmit, isLoading }) => {
         [name]: formatCPF(value),
       });
 
-      // Clear error when user starts typing again
       if (errors[name]) {
         setErrors({
           ...errors,
@@ -99,7 +98,6 @@ const UserForm = ({ onSubmit, isLoading }) => {
         [name]: value,
       });
 
-      // Clear error when user starts typing again
       if (errors[name]) {
         setErrors({
           ...errors,
@@ -136,7 +134,6 @@ const UserForm = ({ onSubmit, isLoading }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate the entire form before submission
     const validation = validateForm(formData);
 
     if (!validation.isValid) {
@@ -144,7 +141,6 @@ const UserForm = ({ onSubmit, isLoading }) => {
       return;
     }
 
-    // Store validated data and show terms dialog
     setValidatedFormData({
       cpf: validation.formattedData.cpf,
       name: validation.formattedData.name,

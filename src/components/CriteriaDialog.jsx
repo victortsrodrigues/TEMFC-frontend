@@ -170,7 +170,6 @@ const DialogButton = styled.button`
   }
 `;
 
-// Subtle scroll indicator that appears when content is scrollable
 const ScrollIndicator = styled.div`
   position: absolute;
   bottom: 70px; /* Position above footer */
@@ -182,12 +181,9 @@ const ScrollIndicator = styled.div`
   border-radius: 2px;
   opacity: 0.6;
   transition: opacity 0.3s ease;
-
-  /* Show only when needed - controlled by JS */
   display: ${({ show }) => (show ? "block" : "none")};
 `;
 
-// Dialog Implementation
 const CriteriaDialog = ({ isOpen, closeDialog }) => {
   const buttonRef = useRef(null);
   const contentRef = useRef(null);
