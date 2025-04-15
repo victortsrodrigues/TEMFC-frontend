@@ -82,6 +82,8 @@ const CTAButton = styled.button`
   box-shadow: 0 4px 12px rgba(99, 117, 240, 0.3);
   transition: background-color 0.2s ease, transform 0.1s ease;
   cursor: pointer;
+  opacity: ${props => props.disabled ? 0.6 : 1};
+  cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     max-width: 100%; // Full width on small screens
@@ -439,7 +441,11 @@ const Home = () => {
           </InfoLink> {/* Mantido: link abre diálogo */}
         </LinkGroup>
 
-        <CTAButton onClick={handleCTAClick} $hideButton={hideButton}>
+        <CTAButton
+          onClick={handleCTAClick}
+          disabled={hideButton}
+          title={hideButton ? 'Boa sorte!' : ''}
+        >
           Verificar Agora
         </CTAButton>
       </LeftSection>
