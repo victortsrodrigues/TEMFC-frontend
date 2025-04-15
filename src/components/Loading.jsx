@@ -12,6 +12,10 @@ const LoadingContainer = styled.div`
   text-align: center;
   width: 100%;
   max-width: 500px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing[4]}; // Less padding on small screens
+  }
 `;
 
 const LoadingTitle = styled.h3`
@@ -42,14 +46,16 @@ const Loading = ({
   onCancel,
 }) => {
 
+  const spinnerSize = window.innerWidth < 480 ? 80 : 100;
+
   return (
     <LoadingContainer>
       <LoadingTitle>{message}</LoadingTitle>
 
       <MagnifyingGlass
         visible={true}
-        height="100"
-        width="100"
+        height={spinnerSize}
+        width={spinnerSize}
         ariaLabel="magnifying-glass-loading"
         wrapperStyle={{}}
         wrapperClass="magnifying-glass-wrapper"
@@ -83,7 +89,7 @@ Loading.propTypes = {
     step: PropTypes.number,
     message: PropTypes.string,
     percentage: PropTypes.number,
-    status: PropTypes.oneOf(["progress", "completed", "error", "result", "connected"]),
+    status: PropTypes.oneOf(["progress", "in_progress", "completed", "error", "result", "connected"]),
   }),
   onCancel: PropTypes.func,
 };

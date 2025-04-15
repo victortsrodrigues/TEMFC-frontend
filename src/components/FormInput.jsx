@@ -9,6 +9,16 @@ const InputContainer = styled.div`
   width: 100%;
   padding-left: ${({ theme }) => theme.spacing[16]};
   padding-right: ${({ theme }) => theme.spacing[16]};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding-left: ${({ theme }) => theme.spacing[8]}; // Less padding on medium screens
+    padding-right: ${({ theme }) => theme.spacing[8]};
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding-left: ${({ theme }) => theme.spacing[2]}; // Minimal padding on small screens
+    padding-right: ${({ theme }) => theme.spacing[2]};
+  }
 `;
 
 const Label = styled.label`
@@ -27,6 +37,11 @@ const InputField = styled.input`
   font-size: ${({ theme }) => theme.fontSizes.sm};
   background-color: ${({ theme }) => theme.colors.inputBg};
   transition: border-color ${({ theme }) => theme.transitions.fast};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: ${({ theme }) => theme.fontSizes.md}; // Larger font on mobile for better touch input
+    padding: ${({ theme }) => theme.spacing[3]}; // More padding for better touch targets
+  }
   
   &:focus {
     outline: none;
@@ -111,7 +126,7 @@ FormInput.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   onBlur: PropTypes.func,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.string,
   helperText: PropTypes.string.isRequired,
   required: PropTypes.bool,
   disabled: PropTypes.bool,

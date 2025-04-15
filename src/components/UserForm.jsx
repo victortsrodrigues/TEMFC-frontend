@@ -14,6 +14,11 @@ const FormContainer = styled.form`
   box-shadow: ${({ theme }) => theme.shadows.md};
   width: 100%;
   max-width: 500px;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing[4]}; // Less padding on small screens
+    border-radius: ${({ theme }) => theme.borderRadius.lg}; // Smaller radius on mobile
+  }
 `;
 
 const FormTitle = styled.h3`
@@ -21,6 +26,10 @@ const FormTitle = styled.h3`
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing[1]};
   margin-top: ${({ theme }) => theme.spacing[2]};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: ${({ theme }) => theme.fontSizes.xl}; // Adjust font size for mobile
+  }
 `;
 
 const FormDescription = styled.p`
@@ -37,6 +46,16 @@ const ButtonContainer = styled.div`
   margin-bottom: ${({ theme }) => theme.spacing[6]};
   padding-left: ${({ theme }) => theme.spacing[16]};
   padding-right: ${({ theme }) => theme.spacing[16]};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    padding-left: ${({ theme }) => theme.spacing[8]}; // Less padding on medium screens
+    padding-right: ${({ theme }) => theme.spacing[8]};
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding-left: ${({ theme }) => theme.spacing[2]}; // Minimal padding on small screens
+    padding-right: ${({ theme }) => theme.spacing[2]};
+  }
 `;
 
 const UserForm = ({ onSubmit, isLoading }) => {

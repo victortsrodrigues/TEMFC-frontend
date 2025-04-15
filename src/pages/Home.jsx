@@ -27,8 +27,13 @@ const LeftSection = styled.div`
   color: ${({ theme }) => theme.colors.white};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-left: 0; // Remove left margin on mobile
     padding: ${({ theme }) => theme.spacing[6]};
     text-align: center;
+  }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing[4]}; // Even smaller padding on small screens
   }
 `;
 
@@ -78,6 +83,11 @@ const CTAButton = styled.button`
   transition: background-color 0.2s ease, transform 0.1s ease;
   cursor: pointer;
 
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    max-width: 100%; // Full width on small screens
+    padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`}; // Smaller padding
+  }
+  
   &:hover {
     background-color: ${({ theme }) => theme.colors.primaryHover};
   }
@@ -98,6 +108,10 @@ const RightSection = styled.div`
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     padding-top: 0;
   }
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing[2]}; // Less padding on small screens
+  }
 `;
 
 const Header = styled.header`
@@ -110,6 +124,10 @@ const Title = styled.h1`
   font-size: ${({ theme }) => theme.fontSizes["5xl"]};
   font-weight: ${({ theme }) => theme.fontWeights.bold};
   line-height: 1.2;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    font-size: ${({ theme }) => theme.fontSizes["4xl"]}; // Smaller font on mobile
+  }
 `;
 
 const Subtitle = styled.p`
@@ -308,7 +326,6 @@ const Home = () => {
           progress={progress}
           onCancel={() => {
             cancelRequest();
-            notifyInfo("Solicitação cancelada pelo usuário.");
           }}
         />
       );

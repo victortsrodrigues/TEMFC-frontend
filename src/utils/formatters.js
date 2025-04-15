@@ -20,7 +20,7 @@ export const formatDecimal = (value) => {
   if (value === undefined || value === null) {
     return '0.0';
   }
-  return Number(value).toFixed(1);
+  return Number(value).toFixed(2);
 };
 
 // Format status to more readable text

@@ -13,6 +13,10 @@ const ResultContainer = styled.div`
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => theme.spacing[4]}; // Less padding on small screens
+  }
 `;
 
 const StatusIndicator = styled.div`
@@ -20,6 +24,12 @@ const StatusIndicator = styled.div`
   align-items: center;
   justify-content: center;
   margin-bottom: ${({ theme }) => theme.spacing[4]};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    .dotlottie-container {
+      width: 250px !important; // Smaller lottie on mobile
+    }
+  }
 `;
 
 const StatusBadge = styled.div`
@@ -66,6 +76,10 @@ const InfoRow = styled.div`
 const InfoLabel = styled.span`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   color: ${({ theme }) => theme.colors.textLight};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    margin-bottom: ${({ theme }) => theme.spacing[1]};
+  }
 `;
 
 const InfoValue = styled.span`
@@ -149,7 +163,7 @@ EligibilityResult.propTypes = {
     name: PropTypes.string.isRequired,
     valid_months: PropTypes.number.isRequired,
     pending_months: PropTypes.number.isRequired,
-    details: PropTypes.arrayOf(
+    details: PropTypes.objectOf(
       PropTypes.shape({
         name: PropTypes.string,
         value: PropTypes.string,

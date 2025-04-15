@@ -14,6 +14,11 @@ const StyledButton = styled.button`
   transition: all ${({ theme }) => theme.transitions.fast};
   cursor: pointer;
   
+  // Adjust padding for small screens
+  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[3]}`};
+  }
+
   // Button variants
   ${({ variant, theme }) => {
     switch (variant) {
@@ -68,16 +73,28 @@ const StyledButton = styled.button`
         return css`
           padding: ${`${theme.spacing[1]} ${theme.spacing[3]}`};
           font-size: ${theme.fontSizes.sm};
+
+          @media (max-width: ${theme.breakpoints.sm}) {
+            padding: ${`${theme.spacing[1]} ${theme.spacing[2]}`};
+          }
         `;
       case 'lg':
         return css`
           padding: ${`${theme.spacing[3]} ${theme.spacing[6]}`};
           font-size: ${theme.fontSizes.md};
+
+          @media (max-width: ${theme.breakpoints.sm}) {
+            padding: ${`${theme.spacing[2]} ${theme.spacing[4]}`};
+          }
         `;
       default:
         return css`
           padding: ${`${theme.spacing[2]} ${theme.spacing[4]}`};
           font-size: ${theme.fontSizes.md};
+
+          @media (max-width: ${theme.breakpoints.sm}) {
+            padding: ${`${theme.spacing[2]} ${theme.spacing[3]}`};
+          }
         `;
     }
   }}
