@@ -70,7 +70,7 @@ const LinkGroup = styled.div`
 const CTAButton = styled.button`
   background-color: ${({ theme }) => theme.colors.primary};
   color: ${({ theme }) => theme.colors.white};
-  display: block;
+  display: ${props => props.$hideButton ? 'none !important' : 'block'};
   width: 100%;
   max-width: 360px;
   margin: ${({ theme }) => theme.spacing[0]} auto ${({ theme }) => theme.spacing[8]};
@@ -106,11 +106,18 @@ const RightSection = styled.div`
   padding: ${({ theme }) => theme.spacing[4]};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    padding-top: 0;
+    // Center the form/loading/results content
+    min-height: 100vh; // Ensure enough space for the form
+    justify-content: center;
+    align-items: center;
+    padding-top: ${({ theme }) => theme.spacing[8]}; // Add more padding at top
+    padding-bottom: ${({ theme }) => theme.spacing[8]}; // Add more padding at bottom
+    margin-top: ${({ theme }) => theme.spacing[6]}; // Create separation from left section
+    scroll-margin-top: 20px; // Helps with scroll positioning
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing[2]}; // Less padding on small screens
+    padding: ${({ theme }) => theme.spacing[4]};
   }
 `;
 
@@ -158,6 +165,14 @@ const ContentContainer = styled.div`
     opacity 0.4s 0.1s cubic-bezier(0.4, 0, 0.2, 1),
     transform 0.4s 0.1s cubic-bezier(0.4, 0, 0.2, 1);
   will-change: opacity, transform;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    // Make sure the container is properly centered
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 const HomeImage = styled.img`
@@ -210,6 +225,9 @@ const ErrorMessage = styled.p`
 
 const Home = () => {
   const [transitionStage, setTransitionStage] = useState('image-visible');
+  // Add state to track if the button should be hidden
+  const [hideButton, setHideButton] = useState(false);
+
   const {
     loading,
     progress,
@@ -222,23 +240,30 @@ const Home = () => {
 
   // Reference for the form container
   const formContainerRef = useRef(null);
+  const rightSectionRef = useRef(null); // Add ref for the right section
 
   // Handle smooth transition from image to form
   const handleCTAClick = () => {
-    // Start exit animation for image
+    
+    setHideButton(true);
     setTransitionStage('image-exit');
     
     // Use rAF for smooth animation sequencing
     requestAnimationFrame(() => {
-      // Start form entrance after image exit starts
       setTransitionStage('form-enter');
-      
-      // Scroll after animations complete
       setTimeout(() => {
-        if (formContainerRef.current) {
-          formContainerRef.current.scrollIntoView({ behavior: 'smooth' });
+        if (rightSectionRef.current) {
+          const section = rightSectionRef.current;
+          const sectionHeight = section.offsetHeight;
+          const windowHeight = window.innerHeight;
+          const scrollTarget = section.offsetTop - (windowHeight - sectionHeight) / 2;
+  
+          window.scrollTo({
+            top: scrollTarget,
+            behavior: 'smooth',
+          });
         }
-      }, 500);
+      }, 40);
     });
   };
 
@@ -250,6 +275,22 @@ const Home = () => {
   // Reset the form and state
   const handleReset = () => {
     resetState();
+    // Keep the button hidden as we're going back to the form
+    setHideButton(true);
+    // Keep the form enter stage
+    setTransitionStage('form-enter');
+    
+    // Scroll back to the form
+    setTimeout(() => {
+      if (rightSectionRef.current) {
+        const top = rightSectionRef.current.getBoundingClientRect().top + window.scrollY;
+        const offset = window.innerHeight / 2 - rightSectionRef.current.offsetHeight / 2;
+        window.scrollTo({
+          top: top - offset,
+          behavior: 'smooth',
+        });
+      }
+    }, 500);
   };
 
   // Display any API errors with improved error handling
@@ -398,12 +439,12 @@ const Home = () => {
           </InfoLink> {/* Mantido: link abre diálogo */}
         </LinkGroup>
 
-        <CTAButton onClick={handleCTAClick}>
+        <CTAButton onClick={handleCTAClick} $hideButton={hideButton}>
           Verificar Agora
         </CTAButton>
       </LeftSection>
 
-      <RightSection>
+      <RightSection ref={rightSectionRef}>
         {renderContent()}
       </RightSection>
       <CriteriaDialog isOpen={isOpen} closeDialog={closeDialog} />

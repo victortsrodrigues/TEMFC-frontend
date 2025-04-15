@@ -24,11 +24,6 @@ const StyledDialogContainer = styled.div`
   justify-content: center;
   z-index: 50;
   padding: ${({ theme }) => theme.spacing[4]};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing[2]}; // Less padding on small screens
-    align-items: flex-end; // Position dialog at bottom on mobile for better thumb reach
-  }
 `;
 
 const StyledDialogPanel = styled(DialogPanel)`
@@ -43,10 +38,7 @@ const StyledDialogPanel = styled(DialogPanel)`
   flex-direction: column;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 100%; // Full width on small screens
-    border-radius: ${({ theme }) => `${theme.borderRadius.lg} ${theme.borderRadius.lg} 0 0`}; // Rounded corners only on top for bottom sheet style
-    max-height: 85vh; // Limit height on mobile
-    overflow-y: auto; // Allow scrolling if content is too tall
+    width: 95%;
   }
 `;
 
@@ -81,10 +73,6 @@ const DialogText = styled.p`
   color: ${({ theme }) => theme.colors.textLight};
   font-size: ${({ theme }) => theme.fontSizes.md};
   margin-bottom: ${({ theme }) => theme.spacing[4]};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    font-size: ${({ theme }) => theme.fontSizes.sm}; // Smaller font on mobile
-  }
 `;
 
 const CheckboxContainer = styled.div`
@@ -96,10 +84,6 @@ const CheckboxLabel = styled.label`
   align-items: flex-start;
   cursor: pointer;
   margin-bottom: ${({ theme }) => theme.spacing[3]};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    padding: ${({ theme }) => theme.spacing[1]} 0; // Add padding for better touch target
-  }
 `;
 
 const StyledCheckbox = styled.input`
@@ -109,11 +93,6 @@ const StyledCheckbox = styled.input`
   width: 18px;
   height: 18px;
   accent-color: ${({ theme }) => theme.colors.primary};
-
-  @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
-    width: 22px; // Larger checkbox on mobile
-    height: 22px;
-  }
 `;
 
 const LabelText = styled.span`
@@ -129,8 +108,6 @@ const DialogFooter = styled.div`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: ${({ theme }) => theme.spacing[3]} ${({ theme }) => theme.spacing[4]} ${({ theme }) => theme.spacing[4]};
-    justify-content: space-between; // Spread buttons on mobile
-    gap: ${({ theme }) => theme.spacing[2]};
   }
 `;
 
