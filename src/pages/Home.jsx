@@ -67,6 +67,10 @@ const FeatureList = styled.ul`
   list-style: none;
   margin-bottom: ${({ theme }) => theme.spacing[8]};
   padding: 0;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-bottom: ${({ theme }) => theme.spacing[6]};
+  }
 `;
 
 const FeatureItem = styled.li`
@@ -102,7 +106,7 @@ const LinkGroup = styled.div`
 const CTAButton = styled.button`
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.primary};
-  display: ${props => props.$hideButton ? 'none !important' : 'block'};
+  display: ${props => props.$hideButton ? 'none !important' : 'none'};
   width: 100%;
   max-width: 300px;
   margin: ${({ theme }) => theme.spacing[0]} auto ${({ theme }) => theme.spacing[8]};
@@ -119,6 +123,7 @@ const CTAButton = styled.button`
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
+    display: ${props => props.$hideButton ? 'none !important' : 'block'};
     max-width: 100%;
     padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
   }
@@ -178,9 +183,12 @@ const Subtitle = styled.p`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   margin-bottom: ${({ theme }) => theme.spacing[6]};
   opacity: 0.9;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    margin-bottom: ${({ theme }) => theme.spacing[3]};
+  }
 `;
 
-// Improved link styling
 const InfoLink = styled.a`
   color: ${({ theme }) => theme.colors.white};
   text-decoration: none;
