@@ -1,23 +1,31 @@
 const theme = {
   colors: {
-    primary: '#6375f0',
-    primaryHover: '#4f61e6',
+    // Changed primary to a darker purple for better contrast
+    primary: '#5151d3',
+    // Darker hover state
+    primaryHover: '#4242b3',
     secondary: '#64748b',
-    terciary: '#3BAAFC',
-    background: 'linear-gradient(to left, #6D7CFD, #77C3FD, #3BAAFC)',
+    // Made terciary color darker for better contrast
+    terciary: '#3090e8',
+    // Modified the background gradient for better contrast with white text
+    background: 'linear-gradient(to left, #5151d3, #4e7edb, #3090e8)',
     white: '#ffffff',
     text: '#262626',
-    textLight: '#64748b',
+    // Darkened textLight for better readability
+    textLight: '#505b70',
     success: '#10b981',
     error: '#ef4444',
     warning: '#f59e0b',
     info: '#3b82f6',
-    border: '#e2e8f0',
+    // Darkened border color slightly
+    border: '#d1d7e5',
     inputBg: '#ffffff',
     disabled: '#e2e8f0',
-    card: 'rgba(255, 255, 255, 0.95)',
+    // Added slight opacity to card background for subtle effect
+    card: 'rgba(255, 255, 255, 0.98)',
     cardHover: 'rgba(255, 255, 255, 1)',
-    overlay: 'rgba(0, 0, 0, 0.05)'
+    // Increased overlay opacity for better contrast
+    overlay: 'rgba(0, 0, 0, 0.1)'
   },
   fontSizes: {
     xs: '0.75rem',
@@ -70,7 +78,7 @@ const theme = {
   },
   breakpoints: {
     sm: '640px',
-    md: '768px',
+    md: '1023px',
     lg: '1024px',
     xl: '1280px'
   }

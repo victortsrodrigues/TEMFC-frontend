@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import styled from "styled-components";
+import styled, { useTheme } from "styled-components";
 import UserForm from "../components/UserForm";
 import EligibilityResult from "../components/EligibilityResult";
 import Loading from "../components/Loading";
@@ -12,6 +12,22 @@ const PageContainer = styled.div`
   display: flex;
   background: ${({ theme }) => theme.colors.background};
 
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 0;
+  }
+  
+  & > * {
+    position: relative;
+    z-index: 1;
+  }
+
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     flex-direction: column;
   }
@@ -22,15 +38,17 @@ const LeftSection = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-left: ${({ theme }) => theme.spacing[4]};
   padding: ${({ theme }) => theme.spacing[8]};
   color: ${({ theme }) => theme.colors.white};
-  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+  position: relative;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
     margin-left: 0;
     padding: ${({ theme }) => theme.spacing[6]};
     text-align: center;
+    min-height: 100vh;
+    display: flex;
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
@@ -41,7 +59,8 @@ const LeftSection = styled.div`
 const Description = styled.p`
   font-size: ${({ theme }) => theme.fontSizes.lg};
   margin-bottom: ${({ theme }) => theme.spacing[6]};
-  opacity: 0.9;
+  opacity: 1;
+  letter-spacing: 0.01em;
 `;
 
 const FeatureList = styled.ul`
@@ -53,10 +72,22 @@ const FeatureList = styled.ul`
 const FeatureItem = styled.li`
   font-size: ${({ theme }) => theme.fontSizes.md};
   margin-bottom: ${({ theme }) => theme.spacing[3]};
+  display: flex;
+  align-items: center;
+  
   &::before {
     content: "✓";
     margin-right: ${({ theme }) => theme.spacing[2]};
     color: ${({ theme }) => theme.colors.white};
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.2);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
   }
 `;
 
@@ -69,19 +100,20 @@ const LinkGroup = styled.div`
 `;
 
 const CTAButton = styled.button`
-  background-color: ${({ theme }) => theme.colors.primary};
-  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.primary};
   display: ${props => props.$hideButton ? 'none !important' : 'block'};
   width: 100%;
-  max-width: 360px;
+  max-width: 300px;
   margin: ${({ theme }) => theme.spacing[0]} auto ${({ theme }) => theme.spacing[8]};
-  font-size: 1.25rem;
+  font-size: ${({ theme }) => theme.fontSizes.xl};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
   padding: ${({ theme }) => `${theme.spacing[4]} ${theme.spacing[10]}`};
-  min-height: 3.5rem;
+  min-height: 2.5rem;
   border-radius: ${({ theme }) => theme.borderRadius.xl};
   border: none;
-  box-shadow: 0 4px 12px rgba(99, 117, 240, 0.3);
-  transition: background-color 0.2s ease, transform 0.1s ease;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
   cursor: pointer;
   opacity: ${props => props.disabled ? 0.6 : 1};
   cursor: ${props => props.disabled ? 'not-allowed' : 'pointer'};
@@ -92,7 +124,8 @@ const CTAButton = styled.button`
   }
   
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryHover};
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
   }
 
   &:active {
@@ -109,13 +142,13 @@ const RightSection = styled.div`
   padding: ${({ theme }) => theme.spacing[4]};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
-    min-height: 100vh;
+    min-height: 100vh; // Full screen height
     justify-content: center;
     align-items: center;
     padding-top: ${({ theme }) => theme.spacing[8]};
     padding-bottom: ${({ theme }) => theme.spacing[8]};
-    margin-top: ${({ theme }) => theme.spacing[6]};
-    scroll-margin-top: 20px;
+    margin-top: 0; // Remove margin that was causing overlap
+    background: ${({ theme }) => theme.colors.background}; // Add background to right section
   }
   
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
@@ -147,13 +180,19 @@ const Subtitle = styled.p`
   opacity: 0.9;
 `;
 
+// Improved link styling
 const InfoLink = styled.a`
   color: ${({ theme }) => theme.colors.white};
-  text-decoration: underline;
+  text-decoration: none;
   font-weight: ${({ theme }) => theme.fontWeights.medium};
+  padding: ${({ theme }) => theme.spacing[2]} ${({ theme }) => theme.spacing[3]};
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: ${({ theme }) => theme.borderRadius.md};
+  transition: all 0.2s ease;
 
   &:hover {
-    opacity: 0.8;
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
   }
 `;
 
@@ -242,6 +281,8 @@ const Home = () => {
   const formContainerRef = useRef(null);
   const rightSectionRef = useRef(null);
 
+  const theme = useTheme();
+
   const handleCTAClick = () => {
     setHideButton(true);
     setTransitionStage('image-exit');
@@ -250,15 +291,24 @@ const Home = () => {
       setTransitionStage('form-enter');
       setTimeout(() => {
         if (rightSectionRef.current) {
-          const section = rightSectionRef.current;
-          const sectionHeight = section.offsetHeight;
-          const windowHeight = window.innerHeight;
-          const scrollTarget = section.offsetTop - (windowHeight - sectionHeight) / 2;
-  
-          window.scrollTo({
-            top: scrollTarget,
-            behavior: 'smooth',
-          });
+          // On mobile/tablet, scroll so only the right section is visible
+          if (window.innerWidth <= parseInt(theme.breakpoints.md)) {
+            window.scrollTo({
+              top: rightSectionRef.current.offsetTop,
+              behavior: 'smooth'
+            });
+          } else {
+            // Original desktop behavior
+            const section = rightSectionRef.current;
+            const sectionHeight = section.offsetHeight;
+            const windowHeight = window.innerHeight;
+            const scrollTarget = section.offsetTop - (windowHeight - sectionHeight) / 2;
+    
+            window.scrollTo({
+              top: scrollTarget,
+              behavior: 'smooth',
+            });
+          }
         }
       }, 40);
     });
@@ -277,14 +327,23 @@ const Home = () => {
     
     setTimeout(() => {
       if (rightSectionRef.current) {
-        const top = rightSectionRef.current.getBoundingClientRect().top + window.scrollY;
-        const offset = window.innerHeight / 2 - rightSectionRef.current.offsetHeight / 2;
-        window.scrollTo({
-          top: top - offset,
-          behavior: 'smooth',
-        });
+        // On mobile/tablet, scroll so only the right section is visible
+        if (window.innerWidth <= parseInt(theme.breakpoints.md)) {
+          window.scrollTo({
+            top: rightSectionRef.current.offsetTop,
+            behavior: 'smooth'
+          });
+        } else {
+          // Original desktop behavior
+          const top = rightSectionRef.current.getBoundingClientRect().top + window.scrollY;
+          const offset = window.innerHeight / 2 - rightSectionRef.current.offsetHeight / 2;
+          window.scrollTo({
+            top: top - offset,
+            behavior: 'smooth',
+          });
+        }
       }
-    }, 500);
+    }, 300);
   };
 
   // Display any API errors with improved error handling

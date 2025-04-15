@@ -1,6 +1,6 @@
-import React from 'react';
-import styled, { css } from 'styled-components';
-import PropTypes from 'prop-types';
+import React from "react";
+import styled, { css } from "styled-components";
+import PropTypes from "prop-types";
 
 // Styled button component
 const StyledButton = styled.button`
@@ -11,9 +11,10 @@ const StyledButton = styled.button`
   font-size: ${({ theme }) => theme.fontSizes.md};
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
-  transition: all ${({ theme }) => theme.transitions.fast};
+  transition: all 0.2s ease;
   cursor: pointer;
-  
+  letter-spacing: 0.01em;
+
   // Adjust padding for small screens
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: ${({ theme }) => `${theme.spacing[2]} ${theme.spacing[3]}`};
@@ -22,103 +23,82 @@ const StyledButton = styled.button`
   // Button variants
   ${({ variant, theme }) => {
     switch (variant) {
-      case 'primary':
+      case "primary":
         return css`
           background-color: ${theme.colors.primary};
           color: ${theme.colors.white};
           border: none;
-          
+          box-shadow: 0 4px 8px rgba(81, 81, 211, 0.3);
+
           &:hover:not(:disabled) {
             background-color: ${theme.colors.primaryHover};
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(81, 81, 211, 0.4);
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(1px);
           }
         `;
-      case 'secondary':
+      case "secondary":
         return css`
           background-color: ${theme.colors.secondary};
           color: ${theme.colors.white};
           border: none;
-          
+          box-shadow: 0 4px 8px rgba(100, 116, 139, 0.3);
+
           &:hover:not(:disabled) {
             filter: brightness(90%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(100, 116, 139, 0.4);
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(1px);
           }
         `;
-      case 'outline':
+      case "outline":
         return css`
           background-color: transparent;
           color: ${theme.colors.primary};
-          border: 1px solid ${theme.colors.primary};
-          
+          border: 2px solid ${theme.colors.primary};
+
           &:hover:not(:disabled) {
-            background-color: ${theme.colors.primary};
-            color: ${theme.colors.white};
+            background-color: rgba(81, 81, 211, 0.05);
+            transform: translateY(-2px);
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(1px);
           }
         `;
       default:
         return css`
+          // Same as primary
           background-color: ${theme.colors.primary};
           color: ${theme.colors.white};
           border: none;
-          
+          box-shadow: 0 4px 8px rgba(81, 81, 211, 0.3);
+
           &:hover:not(:disabled) {
             background-color: ${theme.colors.primaryHover};
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(81, 81, 211, 0.4);
+          }
+
+          &:active:not(:disabled) {
+            transform: translateY(1px);
           }
         `;
     }
   }}
-  
-  // Button sizes
-  ${({ size, theme }) => {
-    switch (size) {
-      case 'sm':
-        return css`
-          padding: ${`${theme.spacing[1]} ${theme.spacing[3]}`};
-          font-size: ${theme.fontSizes.sm};
-
-          @media (max-width: ${theme.breakpoints.sm}) {
-            padding: ${`${theme.spacing[1]} ${theme.spacing[2]}`};
-          }
-        `;
-      case 'lg':
-        return css`
-          padding: ${`${theme.spacing[3]} ${theme.spacing[6]}`};
-          font-size: ${theme.fontSizes.md};
-
-          @media (max-width: ${theme.breakpoints.sm}) {
-            padding: ${`${theme.spacing[2]} ${theme.spacing[4]}`};
-          }
-        `;
-      default:
-        return css`
-          padding: ${`${theme.spacing[2]} ${theme.spacing[4]}`};
-          font-size: ${theme.fontSizes.md};
-
-          @media (max-width: ${theme.breakpoints.sm}) {
-            padding: ${`${theme.spacing[2]} ${theme.spacing[3]}`};
-          }
-        `;
-    }
-  }}
-  
-  // Full width option
-  ${({ fullWidth }) =>
-    fullWidth &&
-    css`
-      width: 100%;
-    `}
-  
-  // Disabled state
-  &:disabled {
-    background-color: ${({ theme }) => theme.colors.disabled};
-    color: ${({ theme }) => theme.colors.textLight};
-    cursor: not-allowed;
-  }
 `;
 
 const Button = ({
   children,
-  variant = 'primary',
-  size = 'md',
-  type = 'button',
+  variant = "primary",
+  size = "md",
+  type = "button",
   fullWidth = false,
   disabled = false,
   onClick,
@@ -141,9 +121,9 @@ const Button = ({
 
 Button.propTypes = {
   children: PropTypes.node,
-  variant: PropTypes.oneOf(['primary', 'secondary', 'outline']),
-  size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  type: PropTypes.oneOf(['button', 'submit', 'reset']),
+  variant: PropTypes.oneOf(["primary", "secondary", "outline"]),
+  size: PropTypes.oneOf(["sm", "md", "lg"]),
+  type: PropTypes.oneOf(["button", "submit", "reset"]),
   fullWidth: PropTypes.bool,
   disabled: PropTypes.bool,
   onClick: PropTypes.func,

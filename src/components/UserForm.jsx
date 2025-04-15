@@ -11,9 +11,10 @@ const FormContainer = styled.form`
   background-color: ${({ theme }) => theme.colors.white};
   padding: ${({ theme }) => theme.spacing[6]};
   border-radius: ${({ theme }) => theme.borderRadius.xl};
-  box-shadow: ${({ theme }) => theme.shadows.md};
+  box-shadow: ${({ theme }) => theme.shadows.lg}; // Enhanced shadow
   width: 100%;
   max-width: 500px;
+  border: 1px solid rgba(0, 0, 0, 0.05); // Subtle border
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     padding: ${({ theme }) => theme.spacing[4]}; // Less padding on small screens
@@ -22,10 +23,11 @@ const FormContainer = styled.form`
 `;
 
 const FormTitle = styled.h3`
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.primary}; // Changed to primary color
   text-align: center;
   margin-bottom: ${({ theme }) => theme.spacing[1]};
   margin-top: ${({ theme }) => theme.spacing[2]};
+  font-weight: ${({ theme }) => theme.fontWeights.bold};
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: ${({ theme }) => theme.fontSizes.xl}; // Adjust font size for mobile

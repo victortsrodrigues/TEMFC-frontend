@@ -26,17 +26,19 @@ const Label = styled.label`
   font-weight: ${({ theme }) => theme.fontWeights.medium};
   margin-bottom: ${({ theme }) => theme.spacing[1]};
   margin-left: ${({ theme }) => theme.spacing[2]};
-  color: ${({ theme }) => theme.colors.text};
+  color: ${({ theme }) => theme.colors.primary}; // Changed to primary color
+  letter-spacing: 0.01em;
 `;
 
 const InputField = styled.input`
-  padding: ${({ theme }) => theme.spacing[2]};
+  padding: ${({ theme }) => theme.spacing[3]};
   border: 1px solid ${({ hasError, theme }) => 
-    hasError ? theme.colors.error : theme.colors.border};
+    hasError ? theme.colors.error : 'rgba(0, 0, 0, 0.1)'};
   border-radius: ${({ theme }) => theme.borderRadius.lg};
   font-size: ${({ theme }) => theme.fontSizes.sm};
   background-color: ${({ theme }) => theme.colors.inputBg};
-  transition: border-color ${({ theme }) => theme.transitions.fast};
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
 
   @media (max-width: ${({ theme }) => theme.breakpoints.sm}) {
     font-size: ${({ theme }) => theme.fontSizes.md}; // Larger font on mobile for better touch input
@@ -47,10 +49,11 @@ const InputField = styled.input`
     outline: none;
     border-color: ${({ hasError, theme }) => 
       hasError ? theme.colors.error : theme.colors.primary};
-    box-shadow: 0 0 0 2px ${({ hasError, theme }) => 
+    box-shadow: 0 0 0 3px ${({ hasError, theme }) => 
       hasError 
-        ? `${theme.colors.error}33` 
-        : `${theme.colors.primary}33`};
+        ? `${theme.colors.error}20` 
+        : `${theme.colors.primary}20`};
+    transform: translateY(-1px);
   }
   
   &:disabled {
@@ -60,7 +63,8 @@ const InputField = styled.input`
 
   &::placeholder {
     font-weight: ${({ theme }) => theme.fontWeights.light};
-    opacity: 0.6;
+    opacity: 0.5;
+    color: #aab2c0;
   }
 `;
 
