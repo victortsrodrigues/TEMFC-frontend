@@ -1,7 +1,6 @@
 # 🩺 TEMFC Frontend – Professional Eligibility Checker
 
 ![Build](https://img.shields.io/github/actions/workflow/status/victortsrodrigues/TEMFC-frontend/cd.yml?branch=main)
-![Version](https://img.shields.io/npm/v/:temfc-frontend)
 ![Docker Pulls](https://img.shields.io/docker/pulls/victortsrodrigues/temfc-frontend)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
