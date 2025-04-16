@@ -1,200 +1,133 @@
-```markdown
-# 🩺 TEMFC Frontend - Professional Eligibility Checker
+# 🩺 TEMFC Frontend – Professional Eligibility Checker
 
-A modern React application for healthcare professionals to check their eligibility for the TEMFC exam (Título de Especialista em Medicina de Família e Comunidade) with real-time progress updates.
+![Build](https://img.shields.io/github/actions/workflow/status/victortsrodrigues/TEMFC-frontend/ci-cd.yml?branch=main)
+![Version](https://img.shields.io/npm/v/temfc-frontend)
+![Docker Pulls](https://img.shields.io/docker/pulls/victortsrodrigues/temfc-frontend)
+[![License: MIT](https://img.shields.io/github/license/victortsrodrigues/TEMFC-frontend)](https://opensource.org/licenses/MIT)
 
-## 🔗 Live Demo
-[https://temfc-checker.vercel.app](https://temfc-checker.vercel.app)
+**A React + Vite web application that lets medical professionals check their eligibility for the TEMFC exam via a real‑time, SSE‑driven interface.**
+
+🔗 **Live Demo**: [https://temfc-frontend.onrender.com](https://temfc-frontend.onrender.com)
+
+---
 
 ## 🧠 Objective
-Provide a user-friendly interface for medical professionals to verify their eligibility for the TEMFC exam by analyzing their professional history from CNES data, with real-time feedback during the verification process.
+Provide a fast, user‑friendly interface for healthcare professionals to submit their CPF and name, track processing progress in real time, and receive instant eligibility results for the TEMFC exam.
+
+---
 
 ## 🚀 Main Technologies
-- **React 18**
-- **Styled Components**
-- **Axios**
-- **Server-Sent Events (SSE)**
-- **Vite**
-- **Headless UI**
-- **Lottie Animations**
+- **Framework**: React 18 + Vite  
+- **HTTP Client**: Axios  
+- **Real‑Time**: Server‑Sent Events (EventSource)  
+- **Styling**: Styled‑Components / CSS‑in‑JS 
+- **Containerization**: Node.js & Nginx Docker images  
+- **CD**: GitHub Actions → Docker Hub → Vercel
+- **UI/UX**: Headless UI, Lottie Animations
+
+---
 
 ## 📦 Features
-- ✅ Clean, responsive UI optimized for all devices
-- ⏳ Real-time progress updates using Server-Sent Events
-- 🔍 Detailed eligibility results with validation criteria
-- 📝 User-friendly form with validation
-- 🔒 Terms and conditions agreement
-- 📊 Visual feedback with animated success/failure states
-- 🌙 Optimized for accessibility
+- ✅ **Responsive UI** with form validation  
+- ⏳ **Real-time progress updates** via SSE
+- 🔍 **Detailed eligibility results** with validation criteria
+- 📝 **Input sanitization** and error handling
+- 🔒 **Terms and conditions** agreement
+- 🐳 **Dockerized** for consistent deployment  
+- 🔁 **Automated CD** pipeline  
+
+---
 
 ## 🏗️ Project Structure
 ```
 TEMFC-frontend/
 ├── src/
-│   ├── api/
-│   │   └── eligibilityApi.js
-│   ├── components/
-│   │   ├── Button.jsx
-│   │   ├── CriteriaDialog.jsx
-│   │   ├── EligibilityResult.jsx
-│   │   ├── FormInput.jsx
-│   │   ├── Loading.jsx
-│   │   ├── TermsAgreementDialog.jsx
-│   │   └── UserForm.jsx
-│   ├── hooks/
-│   │   └── useEligibilityCheck.js
-│   ├── pages/
-│   │   └── Home.jsx
-│   ├── styles/
-│   │   ├── globalStyles.js
-│   │   └── theme.js
-│   ├── utils/
-│   │   ├── formatters.js
-│   │   └── validators.js
-│   ├── App.jsx
-│   └── main.jsx
-├── package.json
+│ ├── api/
+│ │ └── eligibilityApi.js
+│ ├── components/
+│ ├── hooks/
+│ ├── pages/
+│ ├── styles/
+│ ├── utils/
+│ ├── App.jsx
+│ └── main.jsx
+├── index.html
+├── .env
+├── .env.example
+├── public/
+├── Dockerfile
+├── nginx/nginx.conf
 ├── vite.config.js
-└── README.md
+├── package.json
+├── jest.config.js
+├── .eslintrc.js
+└── .github/workflows/cd.yml
 ```
+
+---
 
 ## ⚙️ Running Locally
-### Prerequisites:
-- **Node.js 18+**
-- **npm or yarn**
 
-### Steps:
-1. Clone the repo:
-  ```bash
-  git clone https://github.com/victortsrodrigues/TEMFC-frontend.git
-  cd TEMFC-frontend
-  ```
+### Prerequisites
+- Node.js 18+ & npm  
+- A running instance of the TEMFC Backend API  
 
-2. Install dependencies:
-  ```bash
-  npm install
-  # or
-  yarn
-  ```
-
-3. Run the development server:
-  ```bash
-  npm run dev
-  # or
-  yarn dev
-  ```
-
-  Then open: [http://localhost:5173](http://localhost:5173)
-
-## 🐳 Running with Docker
-### Prerequisites:
-- **Docker**
-
-### Steps:
-1. Build the Docker image:
-   ```bash
-   docker build -t temfc-frontend .
-   ```
-
-2. Run the container:
-   ```bash
-   docker run -d -p 80:80 temfc-frontend
-   ```
-
-3. Open the application in your browser:
-   [http://localhost](http://localhost)
-
-### Dockerfile Example:
-```dockerfile
-# Stage 1: Build the React application
-FROM node:18 AS builder
-WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install
-COPY . .
-RUN yarn build
-
-# Stage 2: Serve with Nginx
-FROM nginx:alpine
-COPY --from=builder /app/dist /usr/share/nginx/html
-EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]
-```
-
-## 🚀 Building for Production
+### 1. Clone the repo
 ```bash
-npm run build
-# or
-yarn build
+git clone https://github.com/victortsrodrigues/TEMFC-frontend.git
+cd TEMFC-frontend
 ```
 
-The build artifacts will be stored in the `dist/` directory.
+### 2. Install dependencies
+```bash
+npm install
+```
 
-## 🔄 Application Flow
+### 3. Configure environment variables
+Create a `.env` file in the root directory:
+```
+VITE_API_BASE_URL=https://your-api-url.com
+```
+⚠️ **Never commit `.env`. Add it to `.gitignore`.**
+
+### 4. Start development server
+```bash
+npm run dev
+```
+Then open: [http://localhost:5173](http://localhost:5173)
+
+---
+
+## 🐳 Docker
+
+### Build and run with Docker:
+```bash
+docker build -t temfc-frontend .
+docker run --rm -p 8080:80 --env-file .env temfc-frontend
+```
+
+---
+
+## 🔁 CD with GitHub Actions
+
+Full CD pipeline:
+- Build Docker image and push to Docker Hub
+- Deploy to Vercel automatically on `main` branch
+
+Pipeline file: `.github/workflows/cd.yml`
+
+---
+
+## 🔄 User Flow
+
 1. User enters their full name and CPF in the form.
 2. User accepts terms and conditions.
-3. Application sends data to the backend API.
-4. Real-time progress updates are displayed via SSE.
-5. Final eligibility result is shown with detailed information.
+3. App sends POST via Axios to backend
+4. Backend processes and streams SSE updates
+5. Frontend displays live progress & eligibility result with detailed information.
 6. User can start a new verification if needed.
 
-## 🧩 Key Components
-- **UserForm**: Handles user input with validation for CPF and name.
-- **Loading**: Displays real-time progress updates during the eligibility check process.
-- **EligibilityResult**: Shows the final result with detailed information about the professional's eligibility status.
-- **CriteriaDialog**: Explains the criteria used for eligibility determination.
-- **TermsAgreementDialog**: Ensures users understand the limitations and responsibilities before proceeding.
-
-## 📤 API Integration
-The application communicates with the TEMFC Backend API:
-- Initial `POST` request to start the verification process.
-- Establishes SSE connection for real-time updates.
-- Processes progress events to update the UI.
-- Handles the final result or any errors.
-
-### Example implementation in `useEligibilityCheck.js`:
-```javascript
-const checkUserEligibilitySSE = useCallback(
-  (userData) => {
-   setLoading(true);
-   setProgress({ step: 0, message: "Iniciando...", percentage: 0 });
-   setResult(null);
-   setError(null);
-
-   checkEligibilitySSE(userData, {
-    onConnected: (data) => {
-      console.log("SSE connection established", data);
-    },
-    onProgress: (progressData) => {
-      setProgress({
-       step: progressData.step || 0,
-       message: progressData.message || "",
-       percentage:
-        progressData.percentage !== undefined
-          ? progressData.percentage
-          : progress.percentage,
-       status: progressData.status || "in_progress",
-      });
-    },
-    onComplete: (resultData) => {
-      setResult(resultData);
-      setLoading(false);
-      setProgress((prev) => ({
-       ...prev,
-       percentage: 100,
-       status: "completed",
-      }));
-    },
-    onError: (errorData) => {
-      console.error("Eligibility check error:", errorData);
-      setError(errorData);
-      setLoading(false);
-    },
-   });
-  },
-  [progress.percentage]
-);
-```
+---
 
 ## 📱 Responsive Design
 The application is fully responsive and optimized for:
@@ -204,9 +137,20 @@ The application is fully responsive and optimized for:
 
 Responsive design is implemented using `styled-components` with media queries based on theme breakpoints.
 
+---
+
 ## 📬 Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+Pull requests are welcome!  
+For major changes, please open an issue first to discuss what you'd like to change.
+
+To contribute:
+1. Fork the repository  
+2. Create a feature branch  
+3. Commit your changes with clear messages  
+4. Ensure tests are included if applicable  
+5. Open a pull request 
+
+---
 
 ## 🛡️ License
-MIT © Victor Rodrigues
-```
+MIT © [Victor Rodrigues](https://github.com/victortsrodrigues)
