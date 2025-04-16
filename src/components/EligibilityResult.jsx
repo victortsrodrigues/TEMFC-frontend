@@ -2,6 +2,8 @@ import React from "react";
 import styled from "styled-components";
 import PropTypes from 'prop-types';
 import Button from "./Button";
+import successAnimation from '../assets/purple-success.lottie'
+import failAnimation    from '../assets/purple-fail.lottie'
 import { formatDecimal, formatStatus } from "../utils/formatters";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 
@@ -110,7 +112,7 @@ const EligibilityResult = ({ result, onReset }) => {
   return (
     <ResultContainer>
       <StatusIndicator>
-        <DotLottieReact src={status === "ELIGIBLE" ? "src/assets/purple-success.lottie" : "src/assets/purple-fail.lottie"} autoplay speed={0.7} style={{ width: '300px' , maxWidth: '300px', height: 'auto' }}/>
+        <DotLottieReact src={status === "ELIGIBLE" ? successAnimation : failAnimation} autoplay speed={0.7} style={{ width: '300px' , maxWidth: '300px', height: 'auto' }}/>
       </StatusIndicator>
 
       <ResultTitle>Resultado</ResultTitle>
