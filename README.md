@@ -1,74 +1,212 @@
-# Eligibility Checker Application
+```markdown
+# 🩺 TEMFC Frontend - Professional Eligibility Checker
 
-A React application that checks and displays user eligibility for exams based on their information. This single-page application uses Vite, styled-components, and communicates with a backend API using Server-Sent Events (SSE).
+A modern React application for healthcare professionals to check their eligibility for the TEMFC exam (Título de Especialista em Medicina de Família e Comunidade) with real-time progress updates.
 
-## Features
+## 🔗 Live Demo
+[https://temfc-checker.vercel.app](https://temfc-checker.vercel.app)
 
-- User input validation for CPF and name
-- Real-time progress tracking with Server-Sent Events
-- Responsive design
-- Elegant error handling
-- Clear eligibility results display
+## 🧠 Objective
+Provide a user-friendly interface for medical professionals to verify their eligibility for the TEMFC exam by analyzing their professional history from CNES data, with real-time feedback during the verification process.
 
-## Getting Started
+## 🚀 Main Technologies
+- **React 18**
+- **Styled Components**
+- **Axios**
+- **Server-Sent Events (SSE)**
+- **Vite**
+- **Headless UI**
+- **Lottie Animations**
 
-### Prerequisites
+## 📦 Features
+- ✅ Clean, responsive UI optimized for all devices
+- ⏳ Real-time progress updates using Server-Sent Events
+- 🔍 Detailed eligibility results with validation criteria
+- 📝 User-friendly form with validation
+- 🔒 Terms and conditions agreement
+- 📊 Visual feedback with animated success/failure states
+- 🌙 Optimized for accessibility
 
-- Node.js (v16 or later recommended)
-- npm or yarn
-
-### Installation
-
-1. Clone the repository or download the source code
-
-2. Navigate to the project directory
+## 🏗️ Project Structure
 ```
-cd eligibility-checker-app
+TEMFC-frontend/
+├── src/
+│   ├── api/
+│   │   └── eligibilityApi.js
+│   ├── components/
+│   │   ├── Button.jsx
+│   │   ├── CriteriaDialog.jsx
+│   │   ├── EligibilityResult.jsx
+│   │   ├── FormInput.jsx
+│   │   ├── Loading.jsx
+│   │   ├── TermsAgreementDialog.jsx
+│   │   └── UserForm.jsx
+│   ├── hooks/
+│   │   └── useEligibilityCheck.js
+│   ├── pages/
+│   │   └── Home.jsx
+│   ├── styles/
+│   │   ├── globalStyles.js
+│   │   └── theme.js
+│   ├── utils/
+│   │   ├── formatters.js
+│   │   └── validators.js
+│   ├── App.jsx
+│   └── main.jsx
+├── package.json
+├── vite.config.js
+└── README.md
 ```
 
-3. Install dependencies
+## ⚙️ Running Locally
+### Prerequisites:
+- **Node.js 18+**
+- **npm or yarn**
+
+### Steps:
+1. Clone the repo:
+  ```bash
+  git clone https://github.com/victortsrodrigues/TEMFC-frontend.git
+  cd TEMFC-frontend
+  ```
+
+2. Install dependencies:
+  ```bash
+  npm install
+  # or
+  yarn
+  ```
+
+3. Run the development server:
+  ```bash
+  npm run dev
+  # or
+  yarn dev
+  ```
+
+  Then open: [http://localhost:5173](http://localhost:5173)
+
+## 🐳 Running with Docker
+### Prerequisites:
+- **Docker**
+
+### Steps:
+1. Build the Docker image:
+   ```bash
+   docker build -t temfc-frontend .
+   ```
+
+2. Run the container:
+   ```bash
+   docker run -d -p 80:80 temfc-frontend
+   ```
+
+3. Open the application in your browser:
+   [http://localhost](http://localhost)
+
+### Dockerfile Example:
+```dockerfile
+# Stage 1: Build the React application
+FROM node:18 AS builder
+WORKDIR /app
+COPY package.json yarn.lock ./
+RUN yarn install
+COPY . .
+RUN yarn build
+
+# Stage 2: Serve with Nginx
+FROM nginx:alpine
+COPY --from=builder /app/dist /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
 ```
-npm install
-```
 
-4. Start the development server
-```
-npm run dev
-```
-
-5. Open your browser and navigate to `http://localhost:3000`
-
-## Usage
-
-1. Enter your 11-digit CPF number and full name
-2. Click "Check Eligibility"
-3. Wait for the system to process your request
-4. View your eligibility results
-
-## Building for Production
-
-To build the application for production, run:
-
-```
+## 🚀 Building for Production
+```bash
 npm run build
+# or
+yarn build
 ```
 
-The build files will be located in the `dist` directory, which you can deploy to your web server.
+The build artifacts will be stored in the `dist/` directory.
 
-## Project Structure
+## 🔄 Application Flow
+1. User enters their full name and CPF in the form.
+2. User accepts terms and conditions.
+3. Application sends data to the backend API.
+4. Real-time progress updates are displayed via SSE.
+5. Final eligibility result is shown with detailed information.
+6. User can start a new verification if needed.
 
-- `src/components`: Reusable UI components
-- `src/api`: API service functions
-- `src/hooks`: Custom React hooks
-- `src/contexts`: React context providers
-- `src/utils`: Utility functions for validation and formatting
-- `src/styles`: Global styles and theme configuration
-- `src/pages`: Page components
+## 🧩 Key Components
+- **UserForm**: Handles user input with validation for CPF and name.
+- **Loading**: Displays real-time progress updates during the eligibility check process.
+- **EligibilityResult**: Shows the final result with detailed information about the professional's eligibility status.
+- **CriteriaDialog**: Explains the criteria used for eligibility determination.
+- **TermsAgreementDialog**: Ensures users understand the limitations and responsibilities before proceeding.
 
-## Technologies Used
+## 📤 API Integration
+The application communicates with the TEMFC Backend API:
+- Initial `POST` request to start the verification process.
+- Establishes SSE connection for real-time updates.
+- Processes progress events to update the UI.
+- Handles the final result or any errors.
 
-- React 18
-- Vite
-- styled-components
-- Axios
-- Server-Sent Events (SSE)
+### Example implementation in `useEligibilityCheck.js`:
+```javascript
+const checkUserEligibilitySSE = useCallback(
+  (userData) => {
+   setLoading(true);
+   setProgress({ step: 0, message: "Iniciando...", percentage: 0 });
+   setResult(null);
+   setError(null);
+
+   checkEligibilitySSE(userData, {
+    onConnected: (data) => {
+      console.log("SSE connection established", data);
+    },
+    onProgress: (progressData) => {
+      setProgress({
+       step: progressData.step || 0,
+       message: progressData.message || "",
+       percentage:
+        progressData.percentage !== undefined
+          ? progressData.percentage
+          : progress.percentage,
+       status: progressData.status || "in_progress",
+      });
+    },
+    onComplete: (resultData) => {
+      setResult(resultData);
+      setLoading(false);
+      setProgress((prev) => ({
+       ...prev,
+       percentage: 100,
+       status: "completed",
+      }));
+    },
+    onError: (errorData) => {
+      console.error("Eligibility check error:", errorData);
+      setError(errorData);
+      setLoading(false);
+    },
+   });
+  },
+  [progress.percentage]
+);
+```
+
+## 📱 Responsive Design
+The application is fully responsive and optimized for:
+- Desktop computers
+- Tablets
+- Mobile phones
+
+Responsive design is implemented using `styled-components` with media queries based on theme breakpoints.
+
+## 📬 Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you'd like to change.
+
+## 🛡️ License
+MIT © Victor Rodrigues
+```
