@@ -1,9 +1,9 @@
 # 🩺 TEMFC Frontend – Professional Eligibility Checker
 
-![Build](https://img.shields.io/github/actions/workflow/status/victortsrodrigues/TEMFC-frontend/ci-cd.yml?branch=main)
+![Build](https://img.shields.io/github/actions/workflow/status/victortsrodrigues/TEMFC-frontend/cd.yml?branch=main)
 ![Version](https://img.shields.io/npm/v/temfc-frontend)
 ![Docker Pulls](https://img.shields.io/docker/pulls/victortsrodrigues/temfc-frontend)
-[![License: MIT](https://img.shields.io/github/license/victortsrodrigues/TEMFC-frontend)](https://opensource.org/licenses/MIT)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 **A React + Vite web application that lets medical professionals check their eligibility for the TEMFC exam via a real‑time, SSE‑driven interface.**
 
@@ -52,7 +52,6 @@ TEMFC-frontend/
 │ ├── App.jsx
 │ └── main.jsx
 ├── index.html
-├── .env
 ├── .env.example
 ├── public/
 ├── Dockerfile
