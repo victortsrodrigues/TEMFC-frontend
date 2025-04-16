@@ -119,6 +119,7 @@ const CTAButton = styled.button`
     display: block;
     max-width: 100%;
     padding: ${({ theme }) => `${theme.spacing[3]} ${theme.spacing[6]}`};
+    margin-bottom: ${({ theme }) => theme.spacing[8]};
   }
 `;
 
